@@ -17,7 +17,7 @@ export default new Vuex.Store({
   getters: {
     properties: state => state.properties,
     tenants: state => state.tenants,
-    // getPropertyByID: state => id => state.properties.filter(property => property.id === id),
+    getPropertyByID: state => id => state.properties.find(property => property.id === id),
   },
   mutations: {
 

@@ -4,14 +4,14 @@
         <h3>Here are your properties:</h3>
         <a 
             class="dashboard-tab" 
-            @click="setActiveTab(property.id)"
+            @click="setActiveProperty(property.id)"
             v-for="property in properties" 
             v-html="property.name" 
             :key="property.id"
         />
         <Property 
-            :property="properties[activePropertyID - 1]"
-            :key="properties[activePropertyID - 1].id"
+            :property="activeProperty"
+            :key="activeProperty.id"
         />
     </div>
     
@@ -31,13 +31,13 @@ export default {
         },
     },
     methods: {
-        setActiveTab(id) {
-            this.activePropertyID = id;
+        setActiveProperty(id) {
+            this.activeProperty = this.$store.getters.getPropertyByID(id);
         },
     },
     data() {
         return {
-            activePropertyID: 1,
+            activeProperty: this.$store.getters.properties[0],
         }
     },
 }
