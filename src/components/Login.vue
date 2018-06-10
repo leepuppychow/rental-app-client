@@ -64,10 +64,11 @@ export default {
                     body: JSON.stringify(body),
                     headers: { 'Content-Type': 'application/json'},
                 })
+                .then(resp => resp.json())
                 .then(resp => {
-                    if (resp.status === 201) {
-                        alert("Account created successfully");
-                    }
+                    localStorage.setItem('token_id', resp.token_id);
+                    localStorage.setItem('access_token', resp.access_token);
+                    debugger
                     // figure out how to route to dashboard (this is undefined here)
                 })
                 .catch(err => console.error(err))
@@ -88,8 +89,11 @@ export default {
                 })
                 .then(resp => resp.json())
                 .then(resp => {
-                    if (resp.status === 201) {
+                    if (resp.status === "success") {
                         alert(resp.message);
+                        localStorage.setItem('token_id', resp.token_id);
+                        localStorage.setItem('access_token', resp.access_token);
+                        debugger
                         // redirect to user's dashboard
                     } else {
                         alert(resp.message);

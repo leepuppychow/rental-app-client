@@ -40,6 +40,14 @@ export default {
             activeProperty: this.$store.getters.properties[0],
         }
     },
+    beforeRouteEnter(to, from, next) {
+        const jwt = localStorage.getItem('token_id')
+        if (jwt) {
+            next();
+        } else {
+            // render a 401
+        }
+    }
 }
 </script>
 
