@@ -3,16 +3,12 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
+const authHeaders = () => ({ authorization: localStorage.getItem('id_token') });
+
 export default new Vuex.Store({
   state: {
-    properties: [
-      { id: 1, name: 'Zion1', street: '3033 Zion St', city: 'Aurora', state: 'CO', zipcode: 80011 },
-      { id: 2, name: 'Thornton', street: '12527 N Ash St', city: 'Thornton', state: 'CO', zipcode: 80241 },
-      { id: 3, name: 'Denver', street: '123 Denver Way', city: 'Denver', state: 'CO', zipcode: 80010 },
-    ],
-    tenants: [
-
-    ],
+    properties: [],
+    tenants: [],
   },
   getters: {
     properties: state => state.properties,
@@ -20,10 +16,46 @@ export default new Vuex.Store({
     getPropertyByID: state => id => state.properties.find(property => property.id === id),
   },
   mutations: {
-
+    setProperties(state, payload) {
+      state.properties = payload;
+    },
   },
   actions: {
+    fetchProperties({ commit }) {
+      fetch('http://localhost:3000/api/v1/properties', {
+        method: 'GET',
+        headers: authHeaders(),
+      })
+        .then(response => response.json())
+        .then(properties => commit('setProperties', properties.data))
+        .catch(error => console.log({ error }));
+    },
+    createNewProperty({ dispatch }, payload) {
+      fetch('http://localhost:3000/api/v1/properties', {
+        method: 'POST',
+        headers: {
+          ...authHeaders(),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+        .then(response => response.json())
+        .then((response) => console.log(response))
+        .then(() => dispatch('fetchProperties'))
+        .catch(error => console.log({ error }));
+    },
+    deleteProperty({ dispatch }, payload) {
+      const id = payload;
 
+      fetch(`http://localhost:3000/api/v1/properties/${id}`, {
+        method: 'DELETE',
+        headers: authHeaders(),
+      })
+        .then(response => response.json())
+        .then((response) => console.log(response))
+        .then(() => dispatch('fetchProperties'))
+        .catch(error => console.log({ error }));
+    },
   },
 });
 

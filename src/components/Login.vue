@@ -1,6 +1,6 @@
 <template>
     <div class="login">
-        <h1>Please Login</h1>
+        <h3>Please Login</h3>
         <input 
             type="text"
             placeholder="Enter username:"
@@ -11,30 +11,27 @@
             placeholder="Enter password:"
             v-model="password"
         />
-        <button @click="loginRequest">Login</button>
-
-        <h1>Or Create New Account</h1>
         <input 
-            type="text"
-            placeholder="Enter username:"
-            v-model="username"
-        />
-        <input 
-            type="password"
-            placeholder="Enter password:"
-            v-model="password"
-        />
-         <input 
+            v-if="createAccount"
             type="text"
             placeholder="Enter email:"
             v-model="email"
         />
          <input 
+            v-if="createAccount"
             type="text"
             placeholder="Enter Venmo name:"
             v-model="venmo"
         />
-        <button @click="createUserRequest">Create Account</button>
+        <button v-if="!createAccount" @click="loginRequest">
+            Login
+        </button>
+        <button v-if="createAccount" @click="createUserRequest">
+            Create Account
+        </button>
+        <h3 @click="showCreateAccountFields">
+            Click ME to Create New Account
+        </h3>
     </div>
     
 </template>
@@ -47,9 +44,13 @@ export default {
             password: null,
             email: null,
             venmo: null,
+            createAccount: false,
         }
     },
     methods: {
+        showCreateAccountFields() {
+            this.createAccount = !this.createAccount;
+        },
         createUserRequest() {
             const body = {
                 username: this.username,
@@ -66,16 +67,18 @@ export default {
                 })
                 .then(resp => resp.json())
                 .then(resp => {
-                    localStorage.setItem('token_id', resp.token_id);
-                    localStorage.setItem('access_token', resp.access_token);
-                    debugger
-                    // figure out how to route to dashboard (this is undefined here)
+                    if (resp.status === "error") {
+                        alert("Error occured. Please enter all data or username is taken.")
+                        this.$router.push('Login');
+                    } else {
+                        localStorage.setItem('token_id', resp.token_id);
+                        this.$router.push('Dashboard');
+                    }
                 })
-                .catch(err => console.error(err))
+                .catch(err => console.log(err))
         },
 
         loginRequest() {
-            // make call to server (hash password there)
             const body = {
                 username: this.username,
                 password: this.password,
@@ -92,26 +95,33 @@ export default {
                     if (resp.status === "success") {
                         alert(resp.message);
                         localStorage.setItem('token_id', resp.token_id);
-                        localStorage.setItem('access_token', resp.access_token);
-                        debugger
+                        this.$router.push('Dashboard');
+
                         // redirect to user's dashboard
                     } else {
                         alert(resp.message);
+                        this.$router.push('Login');
                         // redirect to login homepage
                     }
                 })
                 .catch(err => console.error(err))
         }
     }
-    
-    
 }
 </script>
 
 <style lang="scss">
     .login {
         margin-top: 150px;
+        display: flex;
+        flex-flow: column wrap;
+        align-items: center;
     }
+    input, button {
+        width: 250px;
+        margin: 5px;
+    }
+
 
 </style>
 

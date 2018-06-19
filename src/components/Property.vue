@@ -1,22 +1,30 @@
 <template>
     <div class="property">
-        <h4>{{ property.name }}</h4>
+        <h5>{{ property.name }}</h5>
         <h5>{{ property.street }}</h5>
         <h5>{{ property.city + ', ' + property.state }}</h5>
+        <button @click="deleteProperty(property.id)">
+            Remove Property
+        </button>
     </div>
     
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
     name: 'Property',
     props: ['property'],
     data() {
         return {
-
         }
-    }
-    
+    },
+    methods: {
+        ...mapActions([
+            'deleteProperty'
+        ]),
+    },
 }
 </script>
 

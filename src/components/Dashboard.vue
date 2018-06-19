@@ -1,29 +1,38 @@
 <template>
     <div class="dashboard">
         <h1>Welcome to your Dashboard</h1>
-        <h3>Here are your properties:</h3>
-        <a 
-            class="dashboard-tab" 
-            @click="setActiveProperty(property.id)"
-            v-for="property in properties" 
-            v-html="property.name" 
-            :key="property.id"
-        />
-        <Property 
-            :property="activeProperty"
-            :key="activeProperty.id"
-        />
+        <AddPropertyForm v-if="addPropertyFormVisible"/>
+        <div v-if="properties.length" class="properties">
+            <h3>Here are your properties:</h3>
+            <Property 
+                v-for="property in properties"
+                :property="property"
+                :key="property.id"
+            />
+        </div>
+        <div v-else-if="statusLoading" class="loading">
+            <h4>Loading properties...</h4>
+        </div>
+        <div v-else-if="!statusLoading && !properties.length" class="no-properties">
+            <h4>No properties found. Let's add some new ones!</h4>
+        </div>
+        <button @click="showAddPropertyForm">
+            Add a New Property
+        </button>
     </div>
     
 </template>
 
 <script>
-import Property from './Property.vue'
+import Property from './Property.vue';
+import AddPropertyForm from './AddPropertyForm.vue';
+import { mapActions } from 'vuex';
 
 export default {
     name: 'Dashboard',
     components: {
         Property,
+        AddPropertyForm,
     },
     computed: {
         properties() {
@@ -31,23 +40,23 @@ export default {
         },
     },
     methods: {
-        setActiveProperty(id) {
-            this.activeProperty = this.$store.getters.getPropertyByID(id);
+        ...mapActions([
+            'fetchProperties',
+        ]),
+        showAddPropertyForm() {
+            this.addPropertyFormVisible = !this.addPropertyFormVisible
         },
     },
     data() {
         return {
-            activeProperty: this.$store.getters.properties[0],
+            statusLoading: true,
+            addPropertyFormVisible: false,
         }
     },
-    beforeRouteEnter(to, from, next) {
-        const jwt = localStorage.getItem('token_id')
-        if (jwt) {
-            next();
-        } else {
-            // render a 401
-        }
-    }
+    created() {
+        this.fetchProperties();
+        this.statusLoading = false;
+    },
 }
 </script>
 
