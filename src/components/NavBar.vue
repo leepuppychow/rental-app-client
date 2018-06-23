@@ -1,13 +1,20 @@
 <template>
     <div class="nav-bar">
-        
+        <a @click="logout">Logout</a>
     </div>
     
 </template>
 
 <script>
+
 export default {
-    
+    methods: {
+        logout() {
+            localStorage.removeItem('token_id');
+            alert("You have been logged out successfully");
+            this.$router.push('Login');
+        }
+    },
 }
 </script>
 

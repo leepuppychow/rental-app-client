@@ -1,22 +1,66 @@
 <template>
     <div class="property">
-        <h4>{{ property.name }}</h4>
+        <h3>{{ property.name }}</h3>
         <h5>{{ property.street }}</h5>
         <h5>{{ property.city + ', ' + property.state }}</h5>
+        <h5>Current Rental Rate: {{property.amount || 'none'}} </h5>
+        <h5>Tenants:</h5>
+        <p 
+            v-for="tenant in tenants"
+            :key="tenant.id"
+        >
+            {{tenant.first_name}} {{tenant.last_name}} 
+        </p>
+        <input v-model="rentAmount" type="number" />
+        <button @click="setRent(property.id)">Set Rent</button>
+        <hr/>
+        <button @click="deleteProperty(property.id)">
+            Remove Property
+        </button>
     </div>
     
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
     name: 'Property',
-    props: ['property'],
+    props: ['property', 'tenants'],
+    methods: {
+        ...mapActions([
+            'deleteProperty',
+            'fetchProperties',
+        ]),
+        authHeaders() {
+            return { authorization: localStorage.getItem('token_id') };
+        },
+        setRent(propertyID) {
+            const body = {
+                amount: this.rentAmount,
+            };
+
+            fetch(`http://localhost:3000/api/v1/rent/${propertyID}`, {
+                method: 'PUT',
+                headers: {
+                    ...this.authHeaders(),
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body),
+            })
+                .then(response => response.json())
+                .then(data => { 
+                    this.fetchProperties();
+                    alert(data.message)
+                })
+                .catch(err => console.log(err));
+        },
+    },
     data() {
         return {
-
+            rentAmount: 0,
         }
     }
-    
 }
 </script>
 
@@ -26,6 +70,7 @@ export default {
         width: 75%;
         height: 80%;
         margin: auto;
+        margin-bottom: 20px;
     }
 </style>
 
