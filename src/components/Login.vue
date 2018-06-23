@@ -96,12 +96,9 @@ export default {
                         alert(resp.message);
                         localStorage.setItem('token_id', resp.token_id);
                         this.$router.push('Dashboard');
-
-                        // redirect to user's dashboard
                     } else {
                         alert(resp.message);
                         this.$router.push('Login');
-                        // redirect to login homepage
                     }
                 })
                 .catch(err => console.error(err))

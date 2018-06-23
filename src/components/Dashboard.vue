@@ -1,12 +1,15 @@
 <template>
     <div class="dashboard">
-        <h1>Welcome to your Dashboard</h1>
+        <button @click="showAddPropertyForm">
+            New Property?
+        </button>
         <AddPropertyForm v-if="addPropertyFormVisible"/>
         <div v-if="properties.length" class="properties">
             <h3>Here are your properties:</h3>
             <Property 
                 v-for="property in properties"
                 :property="property"
+                :tenants="tenantsOfProperty(property.id)"
                 :key="property.id"
             />
         </div>
@@ -16,9 +19,6 @@
         <div v-else-if="!statusLoading && !properties.length" class="no-properties">
             <h4>No properties found. Let's add some new ones!</h4>
         </div>
-        <button @click="showAddPropertyForm">
-            Add a New Property
-        </button>
     </div>
     
 </template>
@@ -38,13 +38,19 @@ export default {
         properties() {
             return this.$store.getters.properties;
         },
-    },
+    },  
     methods: {
         ...mapActions([
             'fetchProperties',
+            'fetchTenants',
         ]),
         showAddPropertyForm() {
-            this.addPropertyFormVisible = !this.addPropertyFormVisible
+            this.addPropertyFormVisible = !this.addPropertyFormVisible;
+        },
+        tenantsOfProperty(propertyID) {
+            return this.$store.getters.tenants.filter(tenant => {
+                return tenant.property_id === propertyID;
+            });
         },
     },
     data() {
@@ -55,7 +61,11 @@ export default {
     },
     created() {
         this.fetchProperties();
+        this.fetchTenants();
         this.statusLoading = false;
+    },
+    beforeRouteEnter(to, from, next) {
+        localStorage.getItem('token_id') ? next() : next(false);
     },
 }
 </script>

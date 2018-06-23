@@ -36,7 +36,16 @@ export default {
 </script>
 
 <style lang="scss">
-    
+    .add-property-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        input, button {
+            width: 400px;
+            margin-bottom: 10px;
+        }
+    }
 </style>
 
 

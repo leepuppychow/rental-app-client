@@ -3,7 +3,8 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-const authHeaders = () => ({ authorization: localStorage.getItem('id_token') });
+const authHeaders = () => ({ authorization: localStorage.getItem('token_id') });
+const baseURL = 'http://localhost:3000/api/v1';
 
 export default new Vuex.Store({
   state: {
@@ -19,10 +20,13 @@ export default new Vuex.Store({
     setProperties(state, payload) {
       state.properties = payload;
     },
+    setTenants(state, payload) {
+      state.tenants = payload;
+    },
   },
   actions: {
     fetchProperties({ commit }) {
-      fetch('http://localhost:3000/api/v1/properties', {
+      fetch(`${baseURL}/properties`, {
         method: 'GET',
         headers: authHeaders(),
       })
@@ -31,7 +35,7 @@ export default new Vuex.Store({
         .catch(error => console.log({ error }));
     },
     createNewProperty({ dispatch }, payload) {
-      fetch('http://localhost:3000/api/v1/properties', {
+      fetch(`${baseURL}/properties`, {
         method: 'POST',
         headers: {
           ...authHeaders(),
@@ -47,13 +51,23 @@ export default new Vuex.Store({
     deleteProperty({ dispatch }, payload) {
       const id = payload;
 
-      fetch(`http://localhost:3000/api/v1/properties/${id}`, {
+      fetch(`${baseURL}/properties/${id}`, {
         method: 'DELETE',
         headers: authHeaders(),
       })
         .then(response => response.json())
         .then((response) => console.log(response))
         .then(() => dispatch('fetchProperties'))
+        .catch(error => console.log({ error }));
+    },
+
+    fetchTenants({ commit }, payload) {
+      fetch(`${baseURL}/tenants`, {
+        method: 'GET',
+        headers: authHeaders(),
+      })
+        .then(response => response.json())
+        .then(tenants => commit('setTenants', tenants.data))
         .catch(error => console.log({ error }));
     },
   },
