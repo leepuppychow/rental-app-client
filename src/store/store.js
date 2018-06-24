@@ -10,10 +10,12 @@ export default new Vuex.Store({
   state: {
     properties: [],
     tenants: [],
+    bills: [],
   },
   getters: {
     properties: state => state.properties,
     tenants: state => state.tenants,
+    bills: state => state.bills,
     getPropertyByID: state => id => state.properties.find(property => property.id === id),
   },
   mutations: {
@@ -23,8 +25,14 @@ export default new Vuex.Store({
     setTenants(state, payload) {
       state.tenants = payload;
     },
+    setBills(state, payload) {
+      state.bills = payload;
+    },
   },
   actions: {
+    // MAKE MODULES FOR EACH GROUP LATER ON...
+
+    // PROPERTIES
     fetchProperties({ commit }) {
       fetch(`${baseURL}/properties`, {
         method: 'GET',
@@ -61,7 +69,8 @@ export default new Vuex.Store({
         .catch(error => console.log({ error }));
     },
 
-    fetchTenants({ commit }, payload) {
+    // TENANTS
+    fetchTenants({ commit }) {
       fetch(`${baseURL}/tenants`, {
         method: 'GET',
         headers: authHeaders(),
@@ -70,6 +79,8 @@ export default new Vuex.Store({
         .then(tenants => commit('setTenants', tenants.data))
         .catch(error => console.log({ error }));
     },
+
+    // RENT
     setRent({ dispatch }, payload) {
       const { propertyID, rent } = payload;
       const body = {
@@ -90,6 +101,17 @@ export default new Vuex.Store({
           alert(data.message);
         })
         .catch(err => console.log(err));
+    },
+
+    // BILLS
+    fetchBills({ commit, dispatch }, payload) {
+      fetch(`${baseURL}/bills`, {
+        method: 'GET',
+        headers: authHeaders(),
+      })
+        .then(response => response.json())
+        .then(bills => commit('setBills', bills.data))
+        .catch(error => console.log({ error }));
     },
   },
 });

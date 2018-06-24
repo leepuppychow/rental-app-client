@@ -38,11 +38,15 @@ export default {
         properties() {
             return this.$store.getters.properties;
         },
+        bills() {
+            return this.$store.getters.bills;
+        }
     },  
     methods: {
         ...mapActions([
             'fetchProperties',
             'fetchTenants',
+            'fetchBills',
         ]),
         showAddPropertyForm() {
             this.addPropertyFormVisible = !this.addPropertyFormVisible;
@@ -62,6 +66,7 @@ export default {
     created() {
         this.fetchProperties();
         this.fetchTenants();
+        this.fetchBills();
         this.statusLoading = false;
     },
     beforeRouteEnter(to, from, next) {

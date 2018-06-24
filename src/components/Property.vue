@@ -7,6 +7,9 @@
         <h5>Tenants:</h5>
         <Tenant v-for="tenant in tenants" :tenant="tenant" :key="tenant.id"/>
         <input v-model="rentAmount" type="number" />
+        <h5>Bills:</h5>
+
+
         <button @click="setRent({ propertyID: property.id, rent: rentAmount })">
             Set Rent
         </button>
@@ -21,17 +24,19 @@
 <script>
 import { mapActions } from 'vuex';
 import Tenant from './Tenant';
+import Bill from './Bill';
 
 export default {
     name: 'Property',
     props: ['property', 'tenants'],
     data() {
         return {
-            rentAmount: 0,
+            rentAmount: this.property.amount,
         }
     },
     components: {
         Tenant,
+        Bill,
     },
     methods: {
         ...mapActions([
