@@ -44,7 +44,7 @@ export default new Vuex.Store({
         body: JSON.stringify(payload),
       })
         .then(response => response.json())
-        .then((response) => console.log(response))
+        .then(response => console.log(response))
         .then(() => dispatch('fetchProperties'))
         .catch(error => console.log({ error }));
     },
@@ -56,7 +56,7 @@ export default new Vuex.Store({
         headers: authHeaders(),
       })
         .then(response => response.json())
-        .then((response) => console.log(response))
+        .then(response => console.log(response))
         .then(() => dispatch('fetchProperties'))
         .catch(error => console.log({ error }));
     },
@@ -69,6 +69,27 @@ export default new Vuex.Store({
         .then(response => response.json())
         .then(tenants => commit('setTenants', tenants.data))
         .catch(error => console.log({ error }));
+    },
+    setRent({ dispatch }, payload) {
+      const { propertyID, rent } = payload;
+      const body = {
+        amount: rent,
+      };
+
+      fetch(`${baseURL}/rent/${propertyID}`, {
+        method: 'PUT',
+        headers: {
+          ...authHeaders(),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      })
+        .then(response => response.json())
+        .then((data) => {
+          dispatch('fetchProperties');
+          alert(data.message);
+        })
+        .catch(err => console.log(err));
     },
   },
 });

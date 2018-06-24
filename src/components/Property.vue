@@ -12,7 +12,9 @@
             {{tenant.first_name}} {{tenant.last_name}} 
         </p>
         <input v-model="rentAmount" type="number" />
-        <button @click="setRent(property.id)">Set Rent</button>
+        <button @click="setRent({ propertyID: property.id, rent: rentAmount })">
+            Set Rent
+        </button>
         <hr/>
         <button @click="deleteProperty(property.id)">
             Remove Property
@@ -31,30 +33,8 @@ export default {
         ...mapActions([
             'deleteProperty',
             'fetchProperties',
+            'setRent',
         ]),
-        authHeaders() {
-            return { authorization: localStorage.getItem('token_id') };
-        },
-        setRent(propertyID) {
-            const body = {
-                amount: this.rentAmount,
-            };
-
-            fetch(`http://localhost:3000/api/v1/rent/${propertyID}`, {
-                method: 'PUT',
-                headers: {
-                    ...this.authHeaders(),
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(body),
-            })
-                .then(response => response.json())
-                .then(data => { 
-                    this.fetchProperties();
-                    alert(data.message)
-                })
-                .catch(err => console.log(err));
-        },
     },
     data() {
         return {
@@ -70,7 +50,7 @@ export default {
         width: 75%;
         height: 80%;
         margin: auto;
-        margin-bottom: 20px;
+        margin-bottom: 40px;
     }
 </style>
 
