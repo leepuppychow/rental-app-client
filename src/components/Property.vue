@@ -5,12 +5,7 @@
         <h5>{{ property.city + ', ' + property.state }}</h5>
         <h5>Current Rental Rate: {{property.amount || 'none'}} </h5>
         <h5>Tenants:</h5>
-        <p 
-            v-for="tenant in tenants"
-            :key="tenant.id"
-        >
-            {{tenant.first_name}} {{tenant.last_name}} 
-        </p>
+        <Tenant v-for="tenant in tenants" :tenant="tenant" :key="tenant.id"/>
         <input v-model="rentAmount" type="number" />
         <button @click="setRent({ propertyID: property.id, rent: rentAmount })">
             Set Rent
@@ -25,10 +20,19 @@
 
 <script>
 import { mapActions } from 'vuex';
+import Tenant from './Tenant';
 
 export default {
     name: 'Property',
     props: ['property', 'tenants'],
+    data() {
+        return {
+            rentAmount: 0,
+        }
+    },
+    components: {
+        Tenant,
+    },
     methods: {
         ...mapActions([
             'deleteProperty',
@@ -36,11 +40,6 @@ export default {
             'setRent',
         ]),
     },
-    data() {
-        return {
-            rentAmount: 0,
-        }
-    }
 }
 </script>
 

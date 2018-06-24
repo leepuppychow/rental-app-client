@@ -98,6 +98,8 @@ export default {
                         this.$router.push('Dashboard');
                     } else {
                         alert(resp.message);
+                        this.username = "";
+                        this.password = "";
                         this.$router.push('Login');
                     }
                 })
