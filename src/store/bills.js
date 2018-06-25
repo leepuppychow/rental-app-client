@@ -23,7 +23,7 @@ const bills = {
         headers: authHeaders(),
       })
         .then(response => response.json())
-        .then(response => commit('setresponse', response.data))
+        .then(response => commit('setBills', response.data))
         .catch(error => console.log({ error }));
     },
     setTenantBillsForProperty({ dispatch }, payload) {
