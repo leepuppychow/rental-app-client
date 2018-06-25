@@ -13,6 +13,15 @@
         </button>
 
         <h5>Bills:</h5>
+        <button @click="toggleNewBillModal()">
+            Add New Bill 
+        </button>
+        <NewBillModal 
+            :propertyID="property.id" 
+            :toggle="toggleNewBillModal"
+            v-if="showNewBillModal"
+        />
+
         <Bill v-for="bill in bills" :bill="bill" :key="bill.id"/>
 
         <h5>Tenants:</h5>
@@ -30,6 +39,7 @@
 import { mapActions } from 'vuex';
 import Tenant from './Tenant';
 import Bill from './Bill';
+import NewBillModal from './NewBillModal';
 
 export default {
     name: 'Property',
@@ -38,11 +48,13 @@ export default {
         return {
             rentAmount: this.property.amount,
             splitBillsAmount: 0,
+            showNewBillModal: false,
         }
     },
     components: {
         Tenant,
         Bill,
+        NewBillModal,
     },
     methods: {
         ...mapActions([
@@ -67,6 +79,9 @@ export default {
         },
         totalDueThisMonth() {
             return this.property.amount + this.splitBillsAmount;
+        },
+        toggleNewBillModal() {
+            this.showNewBillModal = !this.showNewBillModal;
         },
     },
     computed: {
