@@ -10,6 +10,7 @@
                 v-for="property in properties"
                 :property="property"
                 :tenants="tenantsOfProperty(property.id)"
+                :bills="billsOfProperty(property.id)"
                 :key="property.id"
             />
         </div>
@@ -55,6 +56,11 @@ export default {
             return this.$store.getters.tenants.filter(tenant => {
                 return tenant.property_id === propertyID;
             });
+        },
+        billsOfProperty(propertyID) {
+            return this.$store.getters.bills.filter(bill => {
+                return bill.property_id === propertyID;
+            })
         },
     },
     data() {

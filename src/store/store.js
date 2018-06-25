@@ -11,22 +11,31 @@ export default new Vuex.Store({
     properties: [],
     tenants: [],
     bills: [],
+    propertiesLoaded: false,
+    tenantsLoaded: false,
+    billsLoaded: false,
   },
   getters: {
     properties: state => state.properties,
     tenants: state => state.tenants,
     bills: state => state.bills,
+    propertiesLoaded: state => state.propertiesLoaded,
+    tenantsLoaded: state => state.tenantsLoaded,
+    billsLoaded: state => state.billsLoaded,
     getPropertyByID: state => id => state.properties.find(property => property.id === id),
   },
   mutations: {
     setProperties(state, payload) {
       state.properties = payload;
+      state.propertiesLoaded = true;
     },
     setTenants(state, payload) {
       state.tenants = payload;
+      state.tenantsLoaded = true;
     },
     setBills(state, payload) {
       state.bills = payload;
+      state.billsLoaded = true;
     },
   },
   actions: {
@@ -111,6 +120,27 @@ export default new Vuex.Store({
       })
         .then(response => response.json())
         .then(bills => commit('setBills', bills.data))
+        .catch(error => console.log({ error }));
+    },
+    setTenantBillsForProperty({ dispatch }, payload) {
+      const { propertyID, splitAmount } = payload;
+      const body = {
+        propertyID,
+        splitAmount,
+      };
+
+      fetch(`${baseURL}/tenant-bills`, {
+        method: 'PUT',
+        headers: {
+          ...authHeaders(),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      })
+        .then(response => response.json())
+        .then((data) => {
+          // Here dispatch('fetchTenantBills')
+        })
         .catch(error => console.log({ error }));
     },
   },
