@@ -1,7 +1,7 @@
 const authHeaders = () => ({ authorization: localStorage.getItem('token_id') });
 const baseURL = 'http://localhost:3000/api/v1';
 
-const properties = {
+const propertiesModule = {
   state: {
     properties: [],
   },
@@ -54,4 +54,4 @@ const properties = {
   },
 };
 
-export default properties;
+export default propertiesModule;

@@ -1,7 +1,7 @@
 const authHeaders = () => ({ authorization: localStorage.getItem('token_id') });
 const baseURL = 'http://localhost:3000/api/v1';
 
-const bills = {
+const billsModule = {
   state: {
     bills: [],
     billsLoaded: false,
@@ -17,7 +17,7 @@ const bills = {
     },
   },
   actions: {
-    fetchBills({ commit, dispatch }, payload) {
+    fetchBills({ commit }) {
       fetch(`${baseURL}/bills`, {
         method: 'GET',
         headers: authHeaders(),
@@ -42,12 +42,25 @@ const bills = {
         body: JSON.stringify(body),
       })
         .then(response => response.json())
-        .then((data) => {
-          // Here dispatch('fetchTenantBills')
+        .then(() => {
+          dispatch('fetchBills');
         })
         .catch(error => console.log({ error }));
+    },
+    createNewBill({ dispatch }, payload) {
+      fetch(`${baseURL}/bills`, {
+        method: 'POST',
+        headers: {
+          ...authHeaders(),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+        .then(response => response.json())
+        .then(() => dispatch('fetchBills'))
+        .catch(error => console.log({ error }))
     },
   },
 }
 
-export default bills;
+export default billsModule;

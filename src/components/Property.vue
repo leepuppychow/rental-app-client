@@ -7,12 +7,24 @@
         <h5>Current Rental Rate: {{property.amount || 'none'}} </h5>
         <h5>Current Split Utilities Bills: {{splitBillsAmount || 'none'}} </h5>
         <h5>TOTAL DUE (***month***): {{this.totalDueThisMonth()}} </h5>
+        <button @click="sendBillEmail(mailerInfo())">Send Bill Email to Tenants</button>
+        <br/>
+
         <input v-model="rentAmount" type="number" />
         <button @click="setRent({ propertyID: property.id, rent: rentAmount })">
             Set Rent
         </button>
 
         <h5>Bills:</h5>
+        <button @click="toggleNewBillModal()">
+            Add New Bill 
+        </button>
+        <NewBillModal 
+            :propertyID="property.id" 
+            :toggleModal="toggleNewBillModal"
+            v-if="showNewBillModal"
+        />
+
         <Bill v-for="bill in bills" :bill="bill" :key="bill.id"/>
 
         <h5>Tenants:</h5>
@@ -30,6 +42,7 @@
 import { mapActions } from 'vuex';
 import Tenant from './Tenant';
 import Bill from './Bill';
+import NewBillModal from './NewBillModal';
 
 export default {
     name: 'Property',
@@ -38,11 +51,13 @@ export default {
         return {
             rentAmount: this.property.amount,
             splitBillsAmount: 0,
+            showNewBillModal: false,
         }
     },
     components: {
         Tenant,
         Bill,
+        NewBillModal,
     },
     methods: {
         ...mapActions([
@@ -50,6 +65,7 @@ export default {
             'fetchProperties',
             'setRent',
             'setTenantBillsForProperty',
+            'sendBillEmail',
         ]),
         divideBillsAmongTenants() {
             const totalOfBills = this.bills.reduce((sum, bill) => sum += bill.amount, 0);
@@ -67,6 +83,16 @@ export default {
         },
         totalDueThisMonth() {
             return this.property.amount + this.splitBillsAmount;
+        },
+        toggleNewBillModal() {
+            this.showNewBillModal = !this.showNewBillModal;
+        },
+        mailerInfo() {
+            return {
+                tenants: this.tenants,
+                totalDue: this.totalDueThisMonth(),
+                bills: this.bills,
+            }
         },
     },
     computed: {
