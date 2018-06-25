@@ -4,16 +4,13 @@ const baseURL = 'http://localhost:3000/api/v1';
 const tenantsModule = {
   state: {
     tenants: [],
-    tenantsLoaded: false,
   },
   getters: {
     tenants: state => state.tenants,
-    tenantsLoaded: state => state.tenantsLoaded,
   },
   mutations: {
     setTenants(state, payload) {
       state.tenants = payload;
-      state.tenantsLoaded = true;
     },
   },
   actions: {

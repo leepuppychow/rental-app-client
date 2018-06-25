@@ -19,6 +19,7 @@
         <button @click="toggleNewBillModal()">
             Add New Bill 
         </button>
+        
         <NewBillModal 
             :propertyID="property.id" 
             :toggleModal="toggleNewBillModal"
@@ -97,12 +98,12 @@ export default {
     },
     computed: {
         tenantsAndBills() {
-            return this.$store.getters.tenantsLoaded && this.$store.getters.billsLoaded;
+            return this.$store.getters.tenants + this.$store.getters.bills;
         },
     },
     watch: {
         tenantsAndBills: function(bothLoaded) {
-            if (bothLoaded) this.divideBillsAmongTenants();
+            this.divideBillsAmongTenants();
         },
     },
 }

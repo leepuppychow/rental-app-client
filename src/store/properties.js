@@ -7,12 +7,10 @@ const propertiesModule = {
   },
   getters: {
     properties: state => state.properties,
-    propertiesLoaded: state => state.propertiesLoaded,
   },
   mutations: {
     setProperties(state, payload) {
       state.properties = payload;
-      state.propertiesLoaded = true;
     },
   },
   actions: {

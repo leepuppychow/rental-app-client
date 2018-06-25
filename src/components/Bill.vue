@@ -1,17 +1,25 @@
 <template>
   <div class="bill" :id="bill.id">
-    <p>{{bill.type}}: {{bill.amount}} for {{processedDate}}</p>
+    <p>
+      {{bill.type}}: {{bill.amount}} for {{this.processedDate()}}
+      <button @click="deleteBill(bill.id)">DELETE</button>
+    </p>
   </div>
   
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   props: ['bill'],
-  computed: {
+  methods: {
+    ...mapActions([
+      'deleteBill',
+    ]),
     processedDate() {
       let date = new Date(this.bill.date) 
-      return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+      return date.toDateString();
     }
   },
 }
