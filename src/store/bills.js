@@ -4,16 +4,13 @@ const baseURL = 'http://localhost:3000/api/v1';
 const billsModule = {
   state: {
     bills: [],
-    billsLoaded: false,
   },
   getters: {
     bills: state => state.bills,
-    billsLoaded: state => state.billsLoaded,
   },
   mutations: {
     setBills(state, payload) {
       state.bills = payload;
-      state.billsLoaded = true;
     },
   },
   actions: {
@@ -26,6 +23,7 @@ const billsModule = {
         .then(response => commit('setBills', response.data))
         .catch(error => console.log({ error }));
     },
+
     setTenantBillsForProperty({ dispatch }, payload) {
       const { propertyID, splitAmount } = payload;
       const body = {
@@ -47,6 +45,7 @@ const billsModule = {
         })
         .catch(error => console.log({ error }));
     },
+
     createNewBill({ dispatch }, payload) {
       fetch(`${baseURL}/bills`, {
         method: 'POST',
@@ -58,9 +57,25 @@ const billsModule = {
       })
         .then(response => response.json())
         .then(() => dispatch('fetchBills'))
-        .catch(error => console.log({ error }))
+        .catch(error => console.log({ error }));
+    },
+
+    deleteBill({ dispatch }, payload) {
+      const billID = payload;
+      alert('Are you sure you want to delete this bill?');
+
+      fetch(`${baseURL}/bills/${billID}`, {
+        method: 'DELETE',
+        headers: authHeaders(),
+      })
+        .then(response => response.json())
+        .then((data) => {
+          console.log(data);
+          dispatch('fetchBills');
+        })
+        .catch(error => console.log({ error }));
     },
   },
-}
+};
 
 export default billsModule;
