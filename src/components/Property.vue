@@ -18,7 +18,7 @@
         </button>
         <NewBillModal 
             :propertyID="property.id" 
-            :toggle="toggleNewBillModal"
+            :toggleModal="toggleNewBillModal"
             v-if="showNewBillModal"
         />
 

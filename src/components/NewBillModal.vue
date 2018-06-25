@@ -2,28 +2,39 @@
   <div class='new-bill-modal'>
     <div class='modal-header'>
       <h3>Add New Bill</h3>
-      <p class="close-modal" @click="toggle">X</p>
+      <p class="close-modal" @click="toggleModal">X</p>
     </div>
-    <input type="text" v-model="type" placeholder="Type"/>
-    <input type="date" v-model="date" placeholder="Date"/>
-    <input type="number" v-model="amount" placeholder="Amount"/>
-    <button @click="">Submit</button>
+    <input type="text" v-model="payload.type" placeholder="Type"/>
+    <input type="date" v-model="payload.date" placeholder="Date"/>
+    <input type="number" v-model="payload.amount" placeholder="Amount"/>
+    <button @click="newBill(payload)">Submit</button>
   </div>
   
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
-  props: ['propertyID', 'toggle'],
+  props: ['propertyID', 'toggleModal'],
   data() {
     return {
-      type: "",
-      date: "",
-      amount: 0,
+      payload: {
+        type: "",
+        date: "",
+        amount: 0,
+        propertyID: this.propertyID,
+      }
     }
   },
   methods: {
-
+    ...mapActions([
+      'createNewBill',
+    ]),
+    newBill(payload) {
+      this.createNewBill(payload);
+      this.toggleModal();
+    },
   },
 }
 </script>

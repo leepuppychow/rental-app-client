@@ -17,7 +17,7 @@ const billsModule = {
     },
   },
   actions: {
-    fetchBills({ commit, dispatch }, payload) {
+    fetchBills({ commit }) {
       fetch(`${baseURL}/bills`, {
         method: 'GET',
         headers: authHeaders(),
@@ -46,6 +46,19 @@ const billsModule = {
           dispatch('fetchBills');
         })
         .catch(error => console.log({ error }));
+    },
+    createNewBill({ dispatch }, payload) {
+      fetch(`${baseURL}/bills`, {
+        method: 'POST',
+        headers: {
+          ...authHeaders(),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+        .then(response => response.json())
+        .then(() => dispatch('fetchBills'))
+        .catch(error => console.log({ error }))
     },
   },
 }
