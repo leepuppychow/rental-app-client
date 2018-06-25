@@ -1,7 +1,7 @@
 const authHeaders = () => ({ authorization: localStorage.getItem('token_id') });
 const baseURL = 'http://localhost:3000/api/v1';
 
-const rent = {
+const rentModule = {
   actions: {
     setRent({ dispatch }, payload) {
       const { propertyID, rent } = payload;
@@ -27,4 +27,4 @@ const rent = {
   },
 };
 
-export default rent;
+export default rentModule;

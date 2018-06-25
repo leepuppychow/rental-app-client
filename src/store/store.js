@@ -1,18 +1,18 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import properties from './properties';
-import tenants from './tenants';
-import bills from './bills';
-import rent from './rent';
+import propertiesModule from './properties';
+import tenantsModule from './tenants';
+import billsModule from './bills';
+import rentModule from './rent';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    properties,
-    tenants,
-    bills,
-    rent,
+    propertiesModule,
+    tenantsModule,
+    billsModule,
+    rentModule,
   },
 });
 

@@ -1,7 +1,7 @@
 const authHeaders = () => ({ authorization: localStorage.getItem('token_id') });
 const baseURL = 'http://localhost:3000/api/v1';
 
-const tenants = {
+const tenantsModule = {
   state: {
     tenants: [],
     tenantsLoaded: false,
@@ -29,4 +29,4 @@ const tenants = {
   },
 };
 
-export default tenants;
+export default tenantsModule;
