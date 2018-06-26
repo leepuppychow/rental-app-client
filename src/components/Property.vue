@@ -5,7 +5,7 @@
             <h5>{{ property.street + " " + property.city + ', ' + property.state }}</h5>
             <h5>Current Rental Rate: {{property.amount || 'none'}} </h5>
             <h5>Current Split Utilities Bills: {{splitBillsAmount || 'none'}} </h5>
-            <h5>TOTAL DUE (***month***): {{this.totalDueThisMonth()}} </h5>
+            <h5>TOTAL DUE ({{currentMonth}}): {{totalDueThisMonth()}} </h5>
         </div>
 
         <div class="property-actions">
@@ -14,7 +14,7 @@
             <button @click="toggleNewBillModal()">
                 Add New Bill 
             </button>
-            <button @click="deleteProperty(property.id)">
+            <button class="danger" @click="deleteProperty(property.id)">
                 Remove Property
             </button>
             <input v-model="rentAmount" type="number" />
@@ -81,11 +81,11 @@ export default {
 
             if (splitAmount) {
                 this.setTenantBillsForProperty(payload);
-                this.splitBillsAmount = splitAmount;
+                this.splitBillsAmount = parseFloat(splitAmount.toFixed(2));
             };
         },
         totalDueThisMonth() {
-            return this.property.amount + this.splitBillsAmount;
+            return (this.property.amount + this.splitBillsAmount).toFixed(2);
         },
         toggleNewBillModal() {
             this.showNewBillModal = !this.showNewBillModal;
@@ -104,6 +104,11 @@ export default {
     computed: {
         tenantsAndBills() {
             return this.$store.getters.tenants + this.$store.getters.bills;
+        },
+        currentMonth() {
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const currentMonth = new Date().getMonth();
+            return months[currentMonth].toUpperCase();
         },
     },
     watch: {
@@ -147,6 +152,10 @@ export default {
             input {
                 margin-top: 30px;
             }
+        }
+
+        .danger {
+            background: red;
         }
     }
 </style>

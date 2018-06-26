@@ -62,18 +62,18 @@ const billsModule = {
 
     deleteBill({ dispatch }, payload) {
       const billID = payload;
-      alert('Are you sure you want to delete this bill?');
-
-      fetch(`${baseURL}/bills/${billID}`, {
-        method: 'DELETE',
-        headers: authHeaders(),
-      })
-        .then(response => response.json())
-        .then((data) => {
-          console.log(data);
-          dispatch('fetchBills');
+      if (window.confirm('Are you sure you want to delete this bill?')) {
+        fetch(`${baseURL}/bills/${billID}`, {
+          method: 'DELETE',
+          headers: authHeaders(),
         })
-        .catch(error => console.log({ error }));
+          .then(response => response.json())
+          .then((data) => {
+            console.log(data);
+            dispatch('fetchBills');
+          })
+          .catch(error => console.log({ error }));
+      }
     },
   },
 };

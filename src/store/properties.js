@@ -38,16 +38,18 @@ const propertiesModule = {
         .catch(error => console.log({ error }));
     },
     deleteProperty({ dispatch }, payload) {
-      const id = payload;
-
-      fetch(`${baseURL}/properties/${id}`, {
-        method: 'DELETE',
-        headers: authHeaders(),
-      })
-        .then(response => response.json())
-        .then(response => console.log(response))
-        .then(() => dispatch('fetchProperties'))
-        .catch(error => console.log({ error }));
+      if (window.confirm('DANGER!!! Are you sure you want to delete this property?')) {
+        const id = payload;
+  
+        fetch(`${baseURL}/properties/${id}`, {
+          method: 'DELETE',
+          headers: authHeaders(),
+        })
+          .then(response => response.json())
+          .then(response => console.log(response))
+          .then(() => dispatch('fetchProperties'))
+          .catch(error => console.log({ error }));
+      }
     },
   },
 };
