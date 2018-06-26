@@ -5,7 +5,6 @@
         </button>
         <AddPropertyForm v-if="addPropertyFormVisible"/>
         <div v-if="properties.length" class="properties">
-            <h3>Here are your properties:</h3>
             <Property 
                 v-for="property in properties"
                 :property="property"

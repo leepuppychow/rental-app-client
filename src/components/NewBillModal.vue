@@ -1,5 +1,5 @@
 <template>
-  <div class='new-bill-modal'>
+  <div id='new-bill-modal'>
     <div class='modal-header'>
       <h3>Add New Bill</h3>
       <p class="close-modal" @click="toggleModal">X</p>
@@ -41,7 +41,7 @@ export default {
 
 <style lang="scss">
 
-  .new-bill-modal {
+  #new-bill-modal {
     z-index: 2;
     position: absolute;
     float: left;
