@@ -1,9 +1,8 @@
 <template>
     <div class="dashboard">
-        <button @click="showAddPropertyForm">
-            New Property?
-        </button>
-        <AddPropertyForm v-if="addPropertyFormVisible"/>
+        <a v-for="property in properties">
+            {{property.name}}
+        </a>
         <div v-if="properties.length" class="properties">
             <Property 
                 v-for="property in properties"
@@ -25,14 +24,12 @@
 
 <script>
 import Property from './Property.vue';
-import AddPropertyForm from './AddPropertyForm.vue';
 import { mapActions } from 'vuex';
 
 export default {
     name: 'Dashboard',
     components: {
         Property,
-        AddPropertyForm,
     },
     computed: {
         properties() {
@@ -48,8 +45,8 @@ export default {
             'fetchTenants',
             'fetchBills',
         ]),
-        showAddPropertyForm() {
-            this.addPropertyFormVisible = !this.addPropertyFormVisible;
+        showAddPropertyModal() {
+            this.AddPropertyModalVisible = !this.AddPropertyModalVisible;
         },
         tenantsOfProperty(propertyID) {
             return this.$store.getters.tenants.filter(tenant => {
@@ -65,7 +62,6 @@ export default {
     data() {
         return {
             statusLoading: true,
-            addPropertyFormVisible: false,
         }
     },
     created() {

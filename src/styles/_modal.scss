@@ -1,0 +1,31 @@
+.modal {
+  z-index: 2;
+  position: fixed;
+  float: left;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  max-height: 250px;
+  background: lightcoral;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+    .modal-header {
+      width: 95%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .close-modal {
+        border: dotted black 1px;
+        padding: 3px 5px 0px;
+      }
+    }
+  
+    input, button {
+      max-width: 250px;
+      margin-bottom: 10px;
+    }
+}

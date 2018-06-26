@@ -1,5 +1,5 @@
 <template>
-  <div id='new-bill-modal'>
+  <div class='modal'>
     <div class='modal-header'>
       <h3>Add New Bill</h3>
       <p class="close-modal" @click="toggleModal">X</p>
@@ -40,40 +40,7 @@ export default {
 </script>
 
 <style lang="scss">
-
-  #new-bill-modal {
-    z-index: 2;
-    position: absolute;
-    float: left;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 500px;
-    max-height: 250px;
-    border: solid black 1px;
-    background: lightcoral;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-      .modal-header {
-        width: 95%;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-
-        .close-modal {
-          border: dotted black 1px;
-          padding: 3px 5px 0px;
-        }
-      }
-    
-      input, button {
-        max-width: 250px;
-        margin-bottom: 10px;
-      }
-  }
-
+  @import '../styles/modal.scss';
 </style>
 
 
