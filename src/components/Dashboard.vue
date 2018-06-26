@@ -1,15 +1,18 @@
 <template>
     <div class="dashboard">
-        <a v-for="property in properties">
+        <a 
+            v-for="property in properties" 
+            :key="property.id"
+            @click="setActiveTab(property.id)" 
+        >
             {{property.name}}
         </a>
         <div v-if="properties.length" class="properties">
             <Property 
-                v-for="property in properties"
-                :property="property"
-                :tenants="tenantsOfProperty(property.id)"
-                :bills="billsOfProperty(property.id)"
-                :key="property.id"
+                :property="activeProperty"
+                :tenants="tenantsOfProperty(activeProperty.id)"
+                :bills="billsOfProperty(activeProperty.id)"
+                :key="activeProperty.id"
             />
         </div>
         <div v-else-if="statusLoading" class="loading">
@@ -31,13 +34,22 @@ export default {
     components: {
         Property,
     },
+    data() {
+        return {
+            statusLoading: true,
+            activeTab: null,
+        }
+    },
     computed: {
         properties() {
             return this.$store.getters.properties;
         },
         bills() {
             return this.$store.getters.bills;
-        }
+        },
+        activeProperty() {
+            return this.properties.find(property => property.id === this.activeTab) || this.properties[0];
+        },
     },  
     methods: {
         ...mapActions([
@@ -58,11 +70,9 @@ export default {
                 return bill.property_id === propertyID;
             })
         },
-    },
-    data() {
-        return {
-            statusLoading: true,
-        }
+        setActiveTab(propertyID) {
+            this.activeTab = propertyID;
+        },
     },
     created() {
         this.fetchProperties();
