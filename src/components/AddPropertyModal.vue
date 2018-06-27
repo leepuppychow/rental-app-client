@@ -9,7 +9,7 @@
        <input type="text" placeholder="City" v-model="payload.city"/>
        <input type="text" placeholder="State" v-model="payload.state"/>
        <input type="text" placeholder="Zipcode" v-model="payload.zipcode"/>
-       <button @click="createNewProperty(payload)">
+       <button @click="makeNewProperty()">
            Submit
        </button>
     </div>
@@ -36,6 +36,10 @@ export default {
         ...mapActions([
             'createNewProperty'
         ]),
+        makeNewProperty() {
+            this.createNewProperty(this.payload);
+            this.toggleModal();
+        },
     }
 }
 </script>

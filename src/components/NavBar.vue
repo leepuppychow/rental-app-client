@@ -1,7 +1,7 @@
 <template>
     <div class="nav-bar">
-        <a @click="logout">Logout</a>
         <a @click="toggleAddPropertyModal">Add New Property</a>
+        <a @click="logout">Logout</a>
         <AddPropertyModal 
             :toggleModal="toggleAddPropertyModal"
             v-if="addPropertyModalVisible"
@@ -40,10 +40,14 @@ export default {
         width: 100%;
         top: 0;
         position: absolute;
-        background-color: aquamarine;
+        background: rgba(60, 92, 60, 0.8);
         display: flex;
         flex-flow: row wrap;
         justify-content: space-evenly;
+        
+        a {
+            color: white;
+        }
     }
 </style>
 

@@ -25,18 +25,25 @@
 
         <div class="property-bills">
             <h4>Bills:</h4>
-            <NewBillModal 
-                :propertyID="property.id" 
-                :toggleModal="toggleNewBillModal"
-                v-if="showNewBillModal"
+            <Bill 
+                v-for="bill in bills" 
+                :property="property"
+                :bill="bill" 
+                :key="bill.id"
             />
-            <Bill v-for="bill in bills" :bill="bill" :key="bill.id"/>
         </div>
 
         <div class="property-tenants">
             <h4>Tenants:</h4>
             <Tenant v-for="tenant in tenants" :tenant="tenant" :key="tenant.id"/>
         </div>
+        <BillModal 
+            :propertyID="property.id" 
+            :toggleModal="toggleNewBillModal"
+            v-if="showNewBillModal"
+        >
+            <h3>Add New Bill</h3>
+        </BillModal>
     </div>
     
 </template>
@@ -45,7 +52,7 @@
 import { mapActions } from 'vuex';
 import Tenant from './Tenant';
 import Bill from './Bill';
-import NewBillModal from './NewBillModal';
+import BillModal from './BillModal';
 
 export default {
     name: 'Property',
@@ -60,7 +67,7 @@ export default {
     components: {
         Tenant,
         Bill,
-        NewBillModal,
+        BillModal,
     },
     methods: {
         ...mapActions([
@@ -71,9 +78,7 @@ export default {
             'sendBillEmail',
         ]),
         divideBillsAmongTenants() {
-            const totalOfBills = this.bills.reduce((sum, bill) => sum += bill.amount, 0);
-            const numberOfTenants = this.tenants.length;
-            const splitAmount = totalOfBills / numberOfTenants;
+            const splitAmount = this.billTotal / this.numberOfTenants;
             const payload = {
                 propertyID: this.property.id,
                 splitAmount: splitAmount,
@@ -102,8 +107,11 @@ export default {
         this.divideBillsAmongTenants();
     },
     computed: {
-        tenantsAndBills() {
-            return this.$store.getters.tenants + this.$store.getters.bills;
+        billTotal() {
+            return this.bills.reduce((sum, bill) => sum += bill.amount, 0);
+        },
+        numberOfTenants() {
+            return this.tenants.length;
         },
         currentMonth() {
             const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -112,7 +120,10 @@ export default {
         },
     },
     watch: {
-        tenantsAndBills: function(bothLoaded) {
+        billTotal: function() {
+            this.divideBillsAmongTenants();
+        },
+        numberOfTenants: function() {
             this.divideBillsAmongTenants();
         },
     },
@@ -121,7 +132,7 @@ export default {
 
 <style lang="scss">
     .property {
-        background: rgb(143, 240, 143);
+        background: rgba(60, 92, 60, 0.5);
         width: 75vw;
         height: auto;
         margin: auto;

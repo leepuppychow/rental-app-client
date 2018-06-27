@@ -55,9 +55,28 @@ const billsModule = {
         },
         body: JSON.stringify(payload),
       })
-        .then(response => response.json())
         .then(() => dispatch('fetchBills'))
         .catch(error => console.log({ error }));
+    },
+
+    updateBill({ dispatch }, payload) {
+      const { billID, type, amount, date } = payload;
+      const body = {
+        type,
+        amount,
+        date,
+      };
+      
+      fetch(`${baseURL}/bills/${billID}`, {
+        method: 'PUT',
+        headers: {
+          ...authHeaders(),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      })
+        .then(() => dispatch('fetchBills'))
+        .catch(err => console.log({ err }));
     },
 
     deleteBill({ dispatch }, payload) {

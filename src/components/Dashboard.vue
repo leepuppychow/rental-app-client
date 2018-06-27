@@ -1,12 +1,15 @@
 <template>
     <div class="dashboard">
-        <a 
-            v-for="property in properties" 
-            :key="property.id"
-            @click="setActiveTab(property.id)" 
-        >
-            {{property.name}}
-        </a>
+        <div class="tabs">
+            <a 
+                class="property-tab"
+                v-for="property in properties" 
+                :key="property.id"
+                @click="setActiveTab(property.id)" 
+            >
+                {{property.name}}
+            </a>
+        </div>
         <div v-if="properties.length" class="properties">
             <Property 
                 :property="activeProperty"
@@ -90,10 +93,25 @@ export default {
     .dashboard {
         background-color: white;
         margin-top: 100px;
-        .dashboard-tab {
-            margin-right: 30px;
-            color: blue;
+
+        .tabs {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-bottom: 20px;
+
+            .property-tab {
+                margin-right: 20px;
+                color: white;
+                background: rgba(60, 92, 60, 0.5);
+                padding: 10px;
+
+                &:hover {
+                    background: rgba(60, 92, 60, 0.8);
+                }
+            }
         }
+        
     }
 </style>
 
