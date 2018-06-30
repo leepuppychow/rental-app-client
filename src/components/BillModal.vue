@@ -20,8 +20,8 @@ export default {
   computed: {
     payload() {
       return {
-        type: this.bill ? this.bill.type : "",
-        date: this.bill ? this.bill.date : "",
+        type: this.bill ? this.bill.type : '',
+        date: this.bill ? this.bill.date : '',
         amount: this.bill ? this.bill.amount : 0,
         propertyID: this.bill ? this.bill.property_id : this.propertyID,
         billID: this.bill ? this.bill.id : null,
@@ -35,11 +35,7 @@ export default {
       'fetchBills',
     ]),
     submitBill(payload) {
-      if (this.bill) {
-        this.updateBill(payload);
-      } else {
-        this.createNewBill(payload);
-      }
+      this.bill ? this.updateBill(payload) : this.createNewBill(payload);
       this.fetchBills();
       this.toggleModal();
     },

@@ -1,7 +1,7 @@
 <template>
     <div class="nav-bar">
         <a @click="toggleAddPropertyModal">Add New Property</a>
-        <a @click="logout">Logout</a>
+        <a @click="logout" class="logout">Logout</a>
         <AddPropertyModal 
             :toggleModal="toggleAddPropertyModal"
             v-if="addPropertyModalVisible"

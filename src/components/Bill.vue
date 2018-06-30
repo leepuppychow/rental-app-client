@@ -1,10 +1,10 @@
 <template>
   <div class="bill" :id="bill.id">
-    <p>
+    <div>
       {{bill.type}}: {{bill.amount}} for {{this.processedDate()}}
       <button @click="toggleBillModal">EDIT</button>
       <button @click="deleteBill(bill.id)">DELETE</button>
-    </p>
+    </div>
     <BillModal 
       v-if="showBillModal"
       :toggleModal="toggleBillModal"
@@ -13,7 +13,6 @@
       <h3>Edit Bill</h3>
     </BillModal>
   </div>
-  
 </template>
 
 <script>
