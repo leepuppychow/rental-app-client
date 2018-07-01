@@ -22,7 +22,15 @@ const properties = [
   { id: 3, name: 'Thornton' },
 ];
 
+const tenants = [
+  { id: 1, name: 'lee' },
+  { id: 2, name: 'Jay' },
+  { id: 3, name: 'Mom' },
+  { id: 4, name: 'Ba' },
+];
+
 module.exports = {
   bills,
   properties,
-}
+  tenants,
+};

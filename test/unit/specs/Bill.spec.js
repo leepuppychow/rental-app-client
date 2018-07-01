@@ -7,21 +7,22 @@ const factory = (props = {}) => shallowMount(Bill, {
     ...props,
   },
 });
-
 const bill = fixtures.bills[0];
 const property = fixtures.properties[0];
 
 describe('Bill', () => {
-  it('can load with props', () => {
-    const wrapper = factory({ bill, property });
+  let wrapper; 
 
+  beforeEach(() => {
+    wrapper = factory({ bill, property });
+  });
+
+  it('can load with props', () => {
     assert.equal(wrapper.vm.bill.amount, 60);
     assert.equal(wrapper.vm.property.name, 'Zion');
   });
 
   it('method: processedDate', () => {
-    const wrapper = factory({ bill, property });
-
     assert.equal(wrapper.vm.processedDate(), 'Sat Jun 30 2018');
   })
 });

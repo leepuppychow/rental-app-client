@@ -1,74 +1,43 @@
-// import Vue from 'vue';
-// import { shallowMount } from '@vue/test-utils';
-// import Property from '@/components/Property';
+import Vue from 'vue';
+import { shallowMount } from '@vue/test-utils';
+import Property from '@/components/Property';
+import fixtures from './fixtures';
 
-// const factory = (data = {}, props = {}) => shallowMount(Property, {
-//     data: {
-//       ...data,
-//     },
-//     props: {
-//       ...props,
-//     },
-//   });
+const factory = (data = {}, props = {}) => shallowMount(Property, {
+  data: {
+    ...data,
+  },
+  propsData: {
+    ...props,
+  },
+});
+const property = fixtures.properties[0];
+const { tenants, bills } = fixtures;
 
-// const bills = [
-//   { amount: 60 },
-//   { amount: 40 },
-//   { amount: 50 },
-// ];
 
 // describe('Property', () => {
 //   it('can compute the current billTotal', () => {
-//     const wrapper = factory({}, { bills });
+//     const wrapper = factory({}, { property, tenants, bills });
+//     // Need to stub store action (setTenantBillsForProperty)
 
-//     console.log(wrapper)
-
+//     console.log(wrapper.vm.bills);
 //   });
 // });
 
-// // describe('Property.vue', () => {
-// //   it('can compute the current billTotal()', () => {
-// //     const vm = new Vue(Property).$mount();
-// //     vm.bills = [
-// //       { amount: 60 },
-// //       { amount: 40 },
-// //       { amount: 50 },
-// //     ];
 
-// //     assert.equal(vm.billTotal, 150);
-// //   });
 
-// //   it('can compute the numberOfTenants()', () => {
-// //     const vm = new Vue(Property).$mount();
-// //     vm.tenants = [
-// //       { name: 'Lee' },
-// //       { name: 'Lee1' },
-// //       { name: 'Lee2' },
-// //     ];
+describe('Property', () => {
+  it('can compute the current billTotal()', () => {
+    const vm = new Vue(Property).$mount();
+    vm.bills = bills;
 
-// //     assert.equal(vm.numberOfTenants, 3);
-// //   });
+    assert.equal(vm.billTotal, 150);
+  });
 
-// //   it('can divideBillsAmongTenants()', () => {
-// //     const vm = new Vue(Property).$mount();
+  it('can compute the numberOfTenants()', () => {
+    const vm = new Vue(Property).$mount();
+    vm.tenants = tenants;
 
-// //     // Need to stub the Vuex store??
-
-// //     vm.bills = [
-// //       { amount: 60 },
-// //       { amount: 40 },
-// //       { amount: 50 },
-// //     ];
-// //     vm.tenants = [
-// //       { name: 'Lee' },
-// //       { name: 'Lee1' },
-// //       { name: 'Lee2' },
-// //     ];
-// //     vm.property = { id: 1 };
-// //     vm.splitBillsAmount = 0;
-
-// //     assert.equal(vm.splitBillsAmount, 0);
-// //     vm.divideBillsAmongTenants();
-// //     assert.equal(vm.splitBillsAmount, 50);
-// //   });
-// // });
+    assert.equal(vm.numberOfTenants, 4);
+  });
+})
