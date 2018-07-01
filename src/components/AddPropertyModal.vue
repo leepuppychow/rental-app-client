@@ -1,11 +1,15 @@
 <template>
-    <div class="add-property-form">
+    <div class="modal">
+        <div class='modal-header'>
+            <h3>Create a New Property :)</h3>
+            <p @click="toggleModal">X</p>
+        </div>
        <input type="text" placeholder="Property name" v-model="payload.name"/>
        <input type="text" placeholder="Street" v-model="payload.street"/>
        <input type="text" placeholder="City" v-model="payload.city"/>
        <input type="text" placeholder="State" v-model="payload.state"/>
        <input type="text" placeholder="Zipcode" v-model="payload.zipcode"/>
-       <button @click="createNewProperty(payload)">
+       <button @click="makeNewProperty()">
            Submit
        </button>
     </div>
@@ -15,7 +19,8 @@
 import { mapActions } from 'vuex';
 
 export default {
-    name: 'AddPropertyForm',
+    name: 'AddPropertyModal',
+    props: ['toggleModal'],
     data() {
         return {
             payload: {
@@ -31,21 +36,16 @@ export default {
         ...mapActions([
             'createNewProperty'
         ]),
+        makeNewProperty() {
+            this.createNewProperty(this.payload);
+            this.toggleModal();
+        },
     }
 }
 </script>
 
 <style lang="scss">
-    .add-property-form {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        input, button {
-            width: 400px;
-            margin-bottom: 10px;
-        }
-    }
+    @import '../styles/modal.scss';
 </style>
 
 

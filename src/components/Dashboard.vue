@@ -1,17 +1,21 @@
 <template>
     <div class="dashboard">
-        <button @click="showAddPropertyForm">
-            New Property?
-        </button>
-        <AddPropertyForm v-if="addPropertyFormVisible"/>
-        <div v-if="properties.length" class="properties">
-            <h3>Here are your properties:</h3>
-            <Property 
-                v-for="property in properties"
-                :property="property"
-                :tenants="tenantsOfProperty(property.id)"
-                :bills="billsOfProperty(property.id)"
+        <div class="tabs">
+            <a 
+                class="property-tab"
+                v-for="property in properties" 
                 :key="property.id"
+                @click="setActiveTab(property.id)" 
+            >
+                {{property.name}}
+            </a>
+        </div>
+        <div v-if="properties.length" class="properties">
+            <Property 
+                :property="activeProperty"
+                :tenants="tenantsOfProperty(activeProperty.id)"
+                :bills="billsOfProperty(activeProperty.id)"
+                :key="activeProperty.id"
             />
         </div>
         <div v-else-if="statusLoading" class="loading">
@@ -26,14 +30,18 @@
 
 <script>
 import Property from './Property.vue';
-import AddPropertyForm from './AddPropertyForm.vue';
 import { mapActions } from 'vuex';
 
 export default {
     name: 'Dashboard',
     components: {
         Property,
-        AddPropertyForm,
+    },
+    data() {
+        return {
+            statusLoading: true,
+            activeTab: null,
+        }
     },
     computed: {
         properties() {
@@ -41,7 +49,10 @@ export default {
         },
         bills() {
             return this.$store.getters.bills;
-        }
+        },
+        activeProperty() {
+            return this.properties.find(property => property.id === this.activeTab) || this.properties[0];
+        },
     },  
     methods: {
         ...mapActions([
@@ -49,8 +60,8 @@ export default {
             'fetchTenants',
             'fetchBills',
         ]),
-        showAddPropertyForm() {
-            this.addPropertyFormVisible = !this.addPropertyFormVisible;
+        showAddPropertyModal() {
+            this.AddPropertyModalVisible = !this.AddPropertyModalVisible;
         },
         tenantsOfProperty(propertyID) {
             return this.$store.getters.tenants.filter(tenant => {
@@ -62,12 +73,9 @@ export default {
                 return bill.property_id === propertyID;
             })
         },
-    },
-    data() {
-        return {
-            statusLoading: true,
-            addPropertyFormVisible: false,
-        }
+        setActiveTab(propertyID) {
+            this.activeTab = propertyID;
+        },
     },
     created() {
         this.fetchProperties();
@@ -85,10 +93,25 @@ export default {
     .dashboard {
         background-color: white;
         margin-top: 100px;
-        .dashboard-tab {
-            margin-right: 30px;
-            color: blue;
+
+        .tabs {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-bottom: 20px;
+
+            .property-tab {
+                margin-right: 20px;
+                color: white;
+                background: rgba(60, 92, 60, 0.5);
+                padding: 10px;
+
+                &:hover {
+                    background: rgba(60, 92, 60, 0.8);
+                }
+            }
         }
+        
     }
 </style>
 

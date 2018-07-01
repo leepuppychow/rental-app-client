@@ -55,25 +55,44 @@ const billsModule = {
         },
         body: JSON.stringify(payload),
       })
-        .then(response => response.json())
         .then(() => dispatch('fetchBills'))
         .catch(error => console.log({ error }));
     },
 
+    updateBill({ dispatch }, payload) {
+      const { billID, type, amount, date } = payload;
+      const body = {
+        type,
+        amount,
+        date,
+      };
+      
+      fetch(`${baseURL}/bills/${billID}`, {
+        method: 'PUT',
+        headers: {
+          ...authHeaders(),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      })
+        .then(() => dispatch('fetchBills'))
+        .catch(err => console.log({ err }));
+    },
+
     deleteBill({ dispatch }, payload) {
       const billID = payload;
-      alert('Are you sure you want to delete this bill?');
-
-      fetch(`${baseURL}/bills/${billID}`, {
-        method: 'DELETE',
-        headers: authHeaders(),
-      })
-        .then(response => response.json())
-        .then((data) => {
-          console.log(data);
-          dispatch('fetchBills');
+      if (window.confirm('Are you sure you want to delete this bill?')) {
+        fetch(`${baseURL}/bills/${billID}`, {
+          method: 'DELETE',
+          headers: authHeaders(),
         })
-        .catch(error => console.log({ error }));
+          .then(response => response.json())
+          .then((data) => {
+            console.log(data);
+            dispatch('fetchBills');
+          })
+          .catch(error => console.log({ error }));
+      }
     },
   },
 };
