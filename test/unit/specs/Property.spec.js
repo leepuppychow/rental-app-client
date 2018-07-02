@@ -1,8 +1,22 @@
-import Vue from 'vue';
-import { shallowMount } from '@vue/test-utils';
+import Vuex from 'vuex';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Property from '@/components/Property';
 import fixtures from './fixtures';
 
+// Use localVue so you do not affect global Vue constructor
+const localVue = createLocalVue();
+localVue.use(Vuex);
+
+// Stub out the actions in our Vuex store
+const actions = {
+  setTenantBillsForProperty: sinon.stub(),
+};
+const store = new Vuex.Store({
+  state: {},
+  actions,
+});
+
+// Factory function to create shallow mounted Property instances
 const factory = (data = {}, props = {}) => shallowMount(Property, {
   data: {
     ...data,
@@ -10,34 +24,50 @@ const factory = (data = {}, props = {}) => shallowMount(Property, {
   propsData: {
     ...props,
   },
+  store,
+  localVue,
 });
-const property = fixtures.properties[0];
-const { tenants, bills } = fixtures;
-
-
-// describe('Property', () => {
-//   it('can compute the current billTotal', () => {
-//     const wrapper = factory({}, { property, tenants, bills });
-//     // Need to stub store action (setTenantBillsForProperty)
-
-//     console.log(wrapper.vm.bills);
-//   });
-// });
-
-
+const { tenants, bills, properties } = fixtures;
+const property = properties[0];
 
 describe('Property', () => {
-  it('can compute the current billTotal()', () => {
-    const vm = new Vue(Property).$mount();
-    vm.bills = bills;
+  let wrapper;
 
-    assert.equal(vm.billTotal, 150);
+  beforeEach(() => {
+    wrapper = factory({}, { bills, tenants, property });
   });
 
-  it('can compute the numberOfTenants()', () => {
-    const vm = new Vue(Property).$mount();
-    vm.tenants = tenants;
-
-    assert.equal(vm.numberOfTenants, 4);
+  it('can compute the current billTotal', () => {
+    assert.equal(wrapper.vm.billTotal, 150);
   });
-})
+
+  it('can compute the numberOfTenants', () => {
+    assert.equal(wrapper.vm.numberOfTenants, 4);
+  });
+
+  it('on mount it will divideBillsAmongTenants', () => {
+    assert.equal(wrapper.vm.splitBillsAmount, 37.5);
+  });
+
+  // test Watchers
+  it('will update the splitBillAmount if the billTotal changes', () => {
+    wrapper.setProps({
+      bills: [
+        ...bills,
+        { id: 4, amount: 50 },
+      ],
+    });
+    assert.equal(wrapper.vm.splitBillsAmount, 50);
+  });
+  
+  it('will update the splitBillAmount if the numberOfTenants changes', () => {
+    wrapper.setProps({
+      tenants: [
+        ...tenants, 
+        { id: 5, name: 'Tobi' },
+      ],
+    })
+    assert.equal(wrapper.vm.splitBillsAmount, 30);
+  });
+});
+
