@@ -7,7 +7,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 const { bills, tenants, properties } = fixtures;
 
-const store = new Vuex.Store({
+const store = ({ bills, tenants, properties }) => new Vuex.Store({
   state: {
     bills,
     tenants,
@@ -26,8 +26,8 @@ const store = new Vuex.Store({
   },
 });
 
-const factory = () => shallowMount(Dashboard, {
-  store,
+const factory = ({ bills, tenants, properties }) => shallowMount(Dashboard, {
+  store: store({ bills, tenants, properties }),
   localVue,
 });
 
@@ -36,7 +36,7 @@ describe('Dashboard', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = factory();
+    wrapper = factory(fixtures);
   });
 
   it('can get properties, bills from computed properties', () => {
@@ -48,7 +48,7 @@ describe('Dashboard', () => {
     assert.deepEqual(wrapper.vm.activeProperty, properties[0]);
   });
 
-  it("can setActiveTab", () => {
+  it('can setActiveTab', () => {
     assert.equal(wrapper.vm.activeTab, null);
     wrapper.vm.setActiveTab(2);
     assert.equal(wrapper.vm.activeTab, 2);
@@ -56,7 +56,7 @@ describe('Dashboard', () => {
 
   it('can get the activeProperty when a tab has been clicked', () => {
     assert.equal(wrapper.vm.activeTab, null);
-    
+
     const tabs = wrapper.findAll('.property-tab');
     tabs.at(0).trigger('click');
     assert.equal(wrapper.vm.activeTab, 1);
@@ -78,6 +78,12 @@ describe('Dashboard', () => {
     assert.equal(wrapper.vm.tenantsOfProperty(1).length, 1);
     assert.equal(wrapper.vm.tenantsOfProperty(2).length, 0);
     assert.equal(wrapper.vm.tenantsOfProperty(1)[0].name, 'lee');
-  })
+  });
+
+  it('will show loading message if no properties are loaded', () => {
+    // const noProperties = [];
+    // wrapper = factory({ bills, tenants, noProperties });
+    
+  });
 })
 ;
