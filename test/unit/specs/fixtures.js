@@ -3,16 +3,19 @@ const bills = [
     id: 1,
     amount: 60,
     date: 1530419702598,
+    property_id: 1,
   },
   {
     id: 2,
     amount: 50,
     date: 1530419702598,
+    property_id: 1,
   },
   {
     id: 3,
     amount: 40,
     date: 1530419702598,
+    property_id: 2,
   },
 ];
 
@@ -23,10 +26,10 @@ const properties = [
 ];
 
 const tenants = [
-  { id: 1, name: 'lee' },
-  { id: 2, name: 'Jay' },
-  { id: 3, name: 'Mom' },
-  { id: 4, name: 'Ba' },
+  { id: 1, name: 'lee', property_id: 1 },
+  { id: 2, name: 'Jay', property_id: 3 },
+  { id: 3, name: 'Mom', property_id: 3 },
+  { id: 4, name: 'Ba', property_id: 3 },
 ];
 
 module.exports = {
