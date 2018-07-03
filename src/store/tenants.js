@@ -23,15 +23,14 @@ const tenantsModule = {
         .then(tenants => commit('setTenants', tenants.data))
         .catch(error => console.log({ error }));
     },
-    archiveTenant({ dispatch }, payload) {
-      const tenantID = payload; 
-      fetch(`${baseURL}/tenants/${tenantID}`, {
+    toggleTenantActive({ dispatch }, payload) {
+      const { tenantID, active } = payload;
+      fetch(`${baseURL}/tenants/${tenantID}?active=${active}`, {
         method: 'DELETE',
         headers: authHeaders(),
       })
-        .then(response => {
+        .then((response) => {
           if (response.status === 200) {
-            alert('Tenant was archived');
             dispatch('fetchTenants');
           } else {
             alert('Error occured');

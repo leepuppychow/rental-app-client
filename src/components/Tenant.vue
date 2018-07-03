@@ -1,8 +1,9 @@
 <template>
   <div>
-    <p> {{tenant.first_name}} {{tenant.last_name}}: {{tenant.email}}</p>
-    <p>Bill status: {{tenant.status}}</p>
-    <button @click="archiveTenant(tenant.id)">Archive</button>
+    {{tenant.first_name}} {{tenant.last_name}}: {{tenant.email}}</br>
+    Bill status: {{tenant.status}}</br>
+    <button v-if="tenant.active" @click="toggleTenantActive(payload(false))">Archive</button>
+    <button v-if="!tenant.active" @click="toggleTenantActive(payload(true))">Reactivate Tenant</button>
   </div>
 </template>
 
@@ -10,12 +11,18 @@
 import { mapActions } from 'vuex';
 
 export default {
+  props: ['tenant'],
   methods: {
     ...mapActions([
-      "archiveTenant",
+      "toggleTenantActive",
     ]),
+    payload(active) {
+      return {
+        tenantID: this.tenant.id,
+        active,
+      }
+    }
   },
-  props: ['tenant'],
 }
 </script>
 
