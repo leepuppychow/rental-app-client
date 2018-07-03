@@ -123,8 +123,11 @@ export default {
         inactiveTenants() {
             return this.tenants.filter(tenant => !tenant.active);
         },
+        sharedBills() {
+            return this.bills.filter(bill => bill.shared);
+        },
         billTotal() {
-            return this.bills.reduce((sum, bill) => sum += bill.amount, 0);
+            return this.sharedBills.reduce((sum, bill) => sum += bill.amount, 0);
         },
         numberOfTenants() {
             return this.activeTenants.length;

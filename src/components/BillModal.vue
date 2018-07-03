@@ -7,6 +7,10 @@
     <input type="text" v-model="payload.type" placeholder="Type"/>
     <input type="date" v-model="payload.date" placeholder="Date"/>
     <input type="number" v-model="payload.amount" placeholder="Amount"/>
+    <div>
+      <label for="checkbox">Shared Bill?</label>
+      <input type="checkbox" v-model="payload.shared">
+    </div>
     <button @click="submitBill(payload)">Submit</button>
   </div>
   
@@ -23,6 +27,7 @@ export default {
         type: this.bill ? this.bill.type : '',
         date: this.bill ? this.bill.date : '',
         amount: this.bill ? this.bill.amount : 0,
+        shared: this.bill ? this.bill.shared : false,
         propertyID: this.bill ? this.bill.property_id : this.propertyID,
         billID: this.bill ? this.bill.id : null,
       }

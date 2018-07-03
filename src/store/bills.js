@@ -47,6 +47,7 @@ const billsModule = {
     },
 
     createNewBill({ dispatch }, payload) {
+      debugger
       fetch(`${baseURL}/bills`, {
         method: 'POST',
         headers: {
@@ -60,11 +61,13 @@ const billsModule = {
     },
 
     updateBill({ dispatch }, payload) {
-      const { billID, type, amount, date } = payload;
+      const { billID, type, amount, date, shared } = payload;
+      debugger
       const body = {
         type,
         amount,
         date,
+        shared,
       };
       
       fetch(`${baseURL}/bills/${billID}`, {

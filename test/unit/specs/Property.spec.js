@@ -54,10 +54,20 @@ describe('Property', () => {
     wrapper.setProps({
       bills: [
         ...bills,
-        { id: 4, amount: 50 },
+        { id: 4, amount: 50, shared: true },
       ],
     });
     assert.equal(wrapper.vm.splitBillsAmount, 50);
+  });
+
+  it('will update the splitBillAmount if the billTotal changes, but only if it is a shared bill', () => {
+    wrapper.setProps({
+      bills: [
+        ...bills,
+        { id: 4, amount: 50, shared: false },
+      ],
+    });
+    assert.equal(wrapper.vm.splitBillsAmount, 37.5);
   });
   
   it('will update the splitBillAmount if the numberOfTenants changes', () => {
@@ -68,6 +78,16 @@ describe('Property', () => {
       ],
     })
     assert.equal(wrapper.vm.splitBillsAmount, 30);
+  });
+
+  it('will update the splitBillAmount if the numberOfTenants changes, but only if tenant is active', () => {
+    wrapper.setProps({
+      tenants: [
+        ...tenants, 
+        { id: 5, name: 'Tobi', active: false },
+      ],
+    })
+    assert.equal(wrapper.vm.splitBillsAmount, 37.5);
   });
 });
 
