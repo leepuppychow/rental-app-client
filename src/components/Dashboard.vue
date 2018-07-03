@@ -7,7 +7,7 @@
                 :key="property.id"
                 @click="setActiveTab(property.id)" 
             >
-                {{property.name}}
+                {{property.street}}
             </a>
         </div>
         <div v-if="properties.length" class="properties">
