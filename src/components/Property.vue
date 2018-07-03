@@ -35,7 +35,16 @@
 
         <div class="property-tenants">
             <h4>Tenants:</h4>
-            <Tenant v-for="tenant in tenants" :tenant="tenant" :key="tenant.id"/>
+            <div>
+                <label for="checkbox">Show All</label>
+                <input type="checkbox" id="checkbox" v-model="displayInactiveTenants">
+            </div>
+            </br>
+            <Tenant v-for="tenant in activeTenants" :tenant="tenant" :key="tenant.id"/>
+            <Tenant 
+                v-if="displayInactiveTenants"
+                v-for="tenant in inactiveTenants" :tenant="tenant" :key="tenant.id"
+            />
         </div>
         <BillModal 
             :propertyID="property.id" 
@@ -62,6 +71,7 @@ export default {
             rentAmount: this.property.amount,
             splitBillsAmount: 0,
             showNewBillModal: false,
+            displayInactiveTenants: false,
         }
     },
     components: {
@@ -107,11 +117,17 @@ export default {
         this.divideBillsAmongTenants();
     },
     computed: {
+        activeTenants() {
+            return this.tenants.filter(tenant => tenant.active);
+        },
+        inactiveTenants() {
+            return this.tenants.filter(tenant => !tenant.active);
+        },
         billTotal() {
             return this.bills.reduce((sum, bill) => sum += bill.amount, 0);
         },
         numberOfTenants() {
-            return this.tenants.length;
+            return this.activeTenants.length;
         },
         currentMonth() {
             const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

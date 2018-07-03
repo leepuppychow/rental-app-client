@@ -26,10 +26,10 @@ const properties = [
 ];
 
 const tenants = [
-  { id: 1, name: 'lee', property_id: 1 },
-  { id: 2, name: 'Jay', property_id: 3 },
-  { id: 3, name: 'Mom', property_id: 3 },
-  { id: 4, name: 'Ba', property_id: 3 },
+  { id: 1, name: 'lee', property_id: 1, active: true },
+  { id: 2, name: 'Jay', property_id: 3, active: true },
+  { id: 3, name: 'Mom', property_id: 3, active: true },
+  { id: 4, name: 'Ba', property_id: 3, active: true },
 ];
 
 module.exports = {

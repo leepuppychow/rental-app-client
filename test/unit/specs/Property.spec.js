@@ -64,7 +64,7 @@ describe('Property', () => {
     wrapper.setProps({
       tenants: [
         ...tenants, 
-        { id: 5, name: 'Tobi' },
+        { id: 5, name: 'Tobi', active: true },
       ],
     })
     assert.equal(wrapper.vm.splitBillsAmount, 30);

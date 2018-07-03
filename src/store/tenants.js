@@ -23,6 +23,46 @@ const tenantsModule = {
         .then(tenants => commit('setTenants', tenants.data))
         .catch(error => console.log({ error }));
     },
+    toggleTenantActive({ dispatch }, payload) {
+      const { tenantID, active } = payload;
+      fetch(`${baseURL}/tenants/${tenantID}?active=${active}`, {
+        method: 'DELETE',
+        headers: authHeaders(),
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            dispatch('fetchTenants');
+          } else {
+            alert('Error occured');
+          }
+        })
+        .catch(error => console.error({ error }));
+    },
+    updateTenant({ dispatch }, payload) {
+      const { tenantID, status, firstName, lastName, email, phone, venmo } = payload;
+      const body = {
+        firstName,
+        lastName,
+        email,
+        phone,
+        status,
+        venmo,
+      }
+      fetch(`${baseURL}/tenants/${tenantID}`, {
+        method: 'PUT',
+        headers: {
+          ...authHeaders(),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.parse(body),
+      })
+        .then(response => {
+          response.json();
+          debugger;
+          dispatch('fetchTenants');
+        })
+        .catch(error => console.error({ error }))
+    },
   },
 };
 
