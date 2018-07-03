@@ -24,15 +24,18 @@
 
         <div class="property-actions">
             <h3>ACTIONS:</h3>
-            <button @click="sendBillEmail(mailerInfo())">Send Bill Email to Tenants</button>
-            <button @click="toggleNewBillModal()">
+            <button class="action-button" @click="sendBillEmail(mailerInfo())">Send Bill Email to Tenants</button>
+            <button class="action-button" @click="toggleNewBillModal()">
                 Add New Bill 
             </button>
-            <button class="danger" @click="deleteProperty(property.id)">
+            <button class="action-button" >
+                Edit Property
+            </button>
+            <button class="action-button danger" @click="deleteProperty(property.id)">
                 Remove Property
             </button>
             <input v-model="rentAmount" type="number" />
-            <button @click="setRent({ propertyID: property.id, rent: rentAmount })">
+            <button class="action-button" @click="setRent({ propertyID: property.id, rent: rentAmount })">
                 Set Rent
             </button>
         </div>
@@ -210,7 +213,7 @@ export default {
         .property-actions, .property-info, .property-tenants, .property-bills {
             width: 48%;
             background: rgb(240, 255, 240);;
-            margin: 7px;
+            margin: 10px;
             display: flex;
             flex-flow: column wrap;
             align-items: center;
@@ -221,7 +224,7 @@ export default {
             display: flex;
             flex-flow: column wrap;
 
-            button, input {
+            .action-button, input {
                 margin-bottom: 10px;
                 text-align: center;
             }
