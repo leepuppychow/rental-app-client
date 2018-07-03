@@ -1,15 +1,29 @@
 <template>
     <div class="property">
         <div class="property-info">
-            <h2>{{ property.name }}</h2>
-            <h5>{{ property.street + " " + property.city + ', ' + property.state }}</h5>
-            <h5>Current Rental Rate: {{property.amount || 'none'}} </h5>
-            <h5>Current Split Utilities Bills: {{splitBillsAmount || 'none'}} </h5>
-            <h5>TOTAL DUE ({{currentMonth}}): {{totalDueThisMonth()}} </h5>
+            <h3>PROPERTY INFO:</h3>
+            <table>
+                <tr>
+                    <th>Address:</th>
+                    <th>{{ property.street + " " + property.city + ', ' + property.state }}</th>
+                </tr>
+                <tr>
+                    <th>Current Rental Rate:</th>
+                    <th>{{property.amount || 'none'}}</th>
+                </tr>
+                <tr>
+                    <th>Current Split Utilities:</th>
+                    <th>{{splitBillsAmount || 'none'}}</th>
+                </tr>
+                <tr>
+                    <th>TOTAL DUE ({{currentMonth}}):</th>
+                    <th>{{totalDueThisMonth()}}</th>
+                </tr>
+            </table>
         </div>
 
         <div class="property-actions">
-            <h4>ACTIONS:</h4>
+            <h3>ACTIONS:</h3>
             <button @click="sendBillEmail(mailerInfo())">Send Bill Email to Tenants</button>
             <button @click="toggleNewBillModal()">
                 Add New Bill 
@@ -24,7 +38,7 @@
         </div>
 
         <div class="property-bills">
-            <h4>BILLS:</h4>
+            <h3>BILLS:</h3>
             <table class="bill-table">
                 <tr class="table-header">
                     <th>Bill Type</th>
@@ -44,7 +58,7 @@
         </div>
 
         <div class="property-tenants">
-            <h4>TENANTS:</h4>
+            <h3>TENANTS:</h3>
             <table class="tenant-table">
                 <tr class="table-header">
                     <th>Name</th>
@@ -178,6 +192,10 @@ export default {
         display: flex;
         flex-flow: row wrap;
         justify-content: space-evenly;
+
+        h3 {
+            text-decoration: underline;
+        }
 
         table, th, tr {
             border: 1px solid black;

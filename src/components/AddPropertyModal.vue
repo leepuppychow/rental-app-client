@@ -4,7 +4,6 @@
             <h3>Create a New Property :)</h3>
             <p @click="toggleModal">X</p>
         </div>
-       <input type="text" placeholder="Property name" v-model="payload.name"/>
        <input type="text" placeholder="Street" v-model="payload.street"/>
        <input type="text" placeholder="City" v-model="payload.city"/>
        <input type="text" placeholder="State" v-model="payload.state"/>
@@ -24,7 +23,6 @@ export default {
     data() {
         return {
             payload: {
-                name: "",
                 street: "",
                 city: "",
                 state: "",
