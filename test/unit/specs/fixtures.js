@@ -3,18 +3,21 @@ const bills = [
     id: 1,
     amount: 60,
     date: 1530419702598,
+    shared: true,
     property_id: 1,
   },
   {
     id: 2,
     amount: 50,
     date: 1530419702598,
+    shared: true,
     property_id: 1,
   },
   {
     id: 3,
     amount: 40,
     date: 1530419702598,
+    shared: true,
     property_id: 2,
   },
 ];

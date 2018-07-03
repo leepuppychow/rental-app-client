@@ -1,8 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
-import Bill from '@/components/Bill.vue';
+import BillRow from '@/components/BillRow.vue';
 import fixtures from './fixtures.js';
 
-const factory = (props = {}) => shallowMount(Bill, {
+const factory = (props = {}) => shallowMount(BillRow, {
   propsData: {
     ...props,
   },
@@ -10,7 +10,7 @@ const factory = (props = {}) => shallowMount(Bill, {
 const bill = fixtures.bills[0];
 const property = fixtures.properties[0];
 
-describe('Bill', () => {
+describe('BillRow', () => {
   let wrapper; 
 
   beforeEach(() => {

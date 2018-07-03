@@ -60,11 +60,12 @@ const billsModule = {
     },
 
     updateBill({ dispatch }, payload) {
-      const { billID, type, amount, date } = payload;
+      const { billID, type, amount, date, shared } = payload;
       const body = {
         type,
         amount,
         date,
+        shared,
       };
       
       fetch(`${baseURL}/bills/${billID}`, {
