@@ -1,18 +1,19 @@
 <template>
-  <div class="bill" :id="bill.id">
-    <div>
-      {{bill.type}}: {{bill.amount}} for {{this.processedDate()}}
-      <button @click="toggleBillModal">EDIT</button>
-      <button @click="deleteBill(bill.id)">DELETE</button>
-    </div>
-    <BillModal 
-      v-if="showBillModal"
-      :toggleModal="toggleBillModal"
-      :bill="bill"
-    >
-      <h3>Edit Bill</h3>
-    </BillModal>
-  </div>
+  <tr class="bill-row" :key="bill.id">
+      <th>{{bill.type}}</th>
+      <th>{{bill.amount}}</th>
+      <th>{{this.processedDate()}}</th>
+      <th>{{bill.shared}}</th>
+      <th><button @click="toggleBillModal">EDIT</button></th>
+      <th><button @click="deleteBill(bill.id)">DELETE</button></th>
+      <BillModal 
+        v-if="showBillModal"
+        :toggleModal="toggleBillModal"
+        :bill="bill"
+      >
+        <h3>Edit Bill</h3>
+      </BillModal>
+  </tr>
 </template>
 
 <script>

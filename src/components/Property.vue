@@ -9,7 +9,7 @@
         </div>
 
         <div class="property-actions">
-            <h4>Actions:</h4>
+            <h4>ACTIONS:</h4>
             <button @click="sendBillEmail(mailerInfo())">Send Bill Email to Tenants</button>
             <button @click="toggleNewBillModal()">
                 Add New Bill 
@@ -24,27 +24,46 @@
         </div>
 
         <div class="property-bills">
-            <h4>Bills:</h4>
-            <Bill 
-                v-for="bill in bills" 
-                :property="property"
-                :bill="bill" 
-                :key="bill.id"
-            />
+            <h4>BILLS:</h4>
+            <table class="bill-table">
+                <tr class="table-header">
+                    <th>Bill Type</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Shared?</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                <BillRow 
+                    v-for="bill in bills" 
+                    :property="property"
+                    :bill="bill" 
+                    :key="bill.id"
+                />    
+            </table>
         </div>
 
         <div class="property-tenants">
-            <h4>Tenants:</h4>
+            <h4>TENANTS:</h4>
+            <table class="tenant-table">
+                <tr class="table-header">
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Paid?</th>
+                    <th>Active?</th>
+                    <th>Edit</th>
+                    <th>Remove</th>
+                </tr>
+                <TenantRow v-for="tenant in activeTenants" :tenant="tenant" :key="tenant.id"/>
+                <TenantRow 
+                    v-if="displayInactiveTenants"
+                    v-for="tenant in inactiveTenants" :tenant="tenant" :key="tenant.id"
+                />
+            </table>
             <div>
-                <label for="checkbox">Show All</label>
+                <label for="checkbox">Show Past Tenants</label>
                 <input type="checkbox" id="checkbox" v-model="displayInactiveTenants">
             </div>
-            </br>
-            <Tenant v-for="tenant in activeTenants" :tenant="tenant" :key="tenant.id"/>
-            <Tenant 
-                v-if="displayInactiveTenants"
-                v-for="tenant in inactiveTenants" :tenant="tenant" :key="tenant.id"
-            />
         </div>
         <BillModal 
             :propertyID="property.id" 
@@ -59,8 +78,8 @@
 
 <script>
 import { mapActions } from 'vuex';
-import Tenant from './Tenant';
-import Bill from './Bill';
+import TenantRow from './TenantRow';
+import BillRow from './BillRow';
 import BillModal from './BillModal';
 
 export default {
@@ -75,8 +94,8 @@ export default {
         }
     },
     components: {
-        Tenant,
-        Bill,
+        TenantRow,
+        BillRow,
         BillModal,
     },
     methods: {
@@ -109,7 +128,7 @@ export default {
             return {
                 tenants: this.tenants,
                 totalDue: this.totalDueThisMonth(),
-                bills: this.bills,
+                bills: this.sharedBills,
             }
         },
     },
@@ -159,6 +178,16 @@ export default {
         display: flex;
         flex-flow: row wrap;
         justify-content: space-evenly;
+
+        table, th, tr {
+            border: 1px solid black;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+
+            .table-header th {
+                font-weight: bold;
+            }
+        }
 
         .property-actions, .property-info, .property-tenants, .property-bills {
             width: 48%;
