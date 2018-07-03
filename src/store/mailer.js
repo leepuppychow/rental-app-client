@@ -31,6 +31,7 @@ const mailer = {
               body: JSON.stringify(body),
             })
               .then(response => response.json())
+              // add in check for error status (200 or 500)
               .then(() => console.log(`Email sent successfully to: ${tenant.email}`))
               .catch(error => console.log({ error })),
           );
