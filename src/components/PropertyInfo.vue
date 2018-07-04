@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  props: ['property', 'totalDueThisMonth'],
+  props: ['property', 'totalDueThisMonth', 'splitBillsAmount'],
 
 }
 </script>
@@ -32,5 +32,7 @@ export default {
 <style>
 
 </style>
+
+
 
 

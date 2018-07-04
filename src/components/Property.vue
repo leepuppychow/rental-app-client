@@ -3,78 +3,24 @@
         <PropertyInfo 
             :property="property"
             :totalDueThisMonth="totalDueThisMonth()"
+            :splitBillsAmount="splitBillsAmount"
         />
-        <div class="property-actions">
-            <h3>ACTIONS:</h3>
-            <button class="action-button" @click="sendBillEmail(mailerInfo())">Send Bill Email to Tenants</button>
-            <button class="action-button" @click="toggleNewTenantModal()">
-                Add New Tenant 
-            </button>
-            <button class="action-button" @click="toggleNewBillModal()">
-                Add New Bill
-            </button>
-            <button class="action-button" >
-                Edit Property
-            </button>
-            <button class="action-button danger" @click="deleteProperty(property.id)">
-                Remove Property
-            </button>
-            <input v-model="rentAmount" type="number" />
-            <button class="action-button" @click="setRent({ property: property, rent: rentAmount })">
-                Set Rent
-            </button>
-        </div>
-
-        <div class="property-bills">
-            <h3>BILLS:</h3>
-            <table class="bill-table">
-                <tr class="table-header">
-                    <th>Bill Type</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                    <th>Shared?</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </tr>
-                <BillRow 
-                    v-for="bill in bills" 
-                    :property="property"
-                    :bill="bill" 
-                    :key="bill.id"
-                />    
-            </table>
-        </div>
-
-        <div class="property-tenants">
-            <h3>TENANTS:</h3>
-            <table class="tenant-table">
-                <tr class="table-header">
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Paid?</th>
-                    <th>Active?</th>
-                    <th>Edit</th>
-                    <th>Remove</th>
-                </tr>
-                <TenantRow 
-                    v-for="tenant in activeTenants" 
-                    :tenant="tenant" 
-                    :key="tenant.id"
-                    :property="property"
-                />
-                <TenantRow 
-                    v-if="displayInactiveTenants"
-                    v-for="tenant in inactiveTenants" 
-                    :tenant="tenant" 
-                    :key="tenant.id"
-                    :property="property"
-                />
-            </table>
-            <div>
-                <label for="checkbox">Show Past Tenants</label>
-                <input type="checkbox" id="checkbox" v-model="displayInactiveTenants">
-            </div>
-        </div>
+        <PropertyActions 
+            :property="property"
+            :rentAmount="rentAmount"
+            :mailerInfo='mailerInfo()'
+            :toggleNewTenantModal="toggleNewTenantModal"
+            :toggleNewBillModal="toggleNewBillModal"
+        />
+        <PropertyBills 
+            :bills="bills"
+            :property="property"
+        />
+        <PropertyTenants
+            :property="property"
+            :activeTenants="activeTenants"
+            :inactiveTenants="inactiveTenants"
+        />
         <TenantModal 
             :property="property" 
             :toggleModal="toggleNewTenantModal"
@@ -100,13 +46,16 @@ import TenantModal from './TenantModal';
 import BillRow from './BillRow';
 import BillModal from './BillModal';
 import PropertyInfo from './PropertyInfo';
+import PropertyBills from './PropertyBills';
+import PropertyTenants from './PropertyTenants';
+import PropertyActions from './PropertyActions';
 
 export default {
     name: 'Property',
     props: ['property', 'tenants', 'bills'],
     data() {
         return {
-            rentAmount: this.property.amount,
+            rentAmount: this.property.rent,
             splitBillsAmount: 0,
             showNewBillModal: false,
             showNewTenantModal: false,
@@ -119,14 +68,13 @@ export default {
         BillRow,
         BillModal,
         PropertyInfo,
+        PropertyBills,
+        PropertyTenants,
+        PropertyActions,
     },
     methods: {
         ...mapActions([
-            'deleteProperty',
-            'fetchProperties',
-            'setRent',
             'setTenantBillsForProperty',
-            'sendBillEmail',
         ]),
         divideBillsAmongTenants() {
             const splitAmount = this.billTotal / this.numberOfTenants;
