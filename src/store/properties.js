@@ -51,6 +51,27 @@ const propertiesModule = {
           .catch(error => console.log({ error }));
       }
     },
+    setRent({ dispatch }, payload) {
+      const propertyID = payload.property.id;
+      const body = {
+        ...payload.property,
+        rent: payload.rent,
+      };
+      fetch(`${baseURL}/properties/${propertyID}`, {
+        method: 'PUT',
+        headers: {
+          ...authHeaders(),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      })
+        .then(response => response.json())
+        .then((data) => {
+          dispatch('fetchProperties');
+          alert(data.message);
+        })
+        .catch(err => console.log(err));
+    },
   },
 };
 

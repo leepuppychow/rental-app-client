@@ -1,27 +1,9 @@
 <template>
     <div class="property">
-        <div class="property-info">
-            <h3>PROPERTY INFO:</h3>
-            <table>
-                <tr>
-                    <th>Address:</th>
-                    <th>{{ property.street + " " + property.city + ', ' + property.state }}</th>
-                </tr>
-                <tr>
-                    <th>Current Rental Rate:</th>
-                    <th>{{property.amount || 'none'}}</th>
-                </tr>
-                <tr>
-                    <th>Current Split Utilities:</th>
-                    <th>{{splitBillsAmount || 'none'}}</th>
-                </tr>
-                <tr>
-                    <th>TOTAL DUE ({{currentMonth}}):</th>
-                    <th>{{totalDueThisMonth()}}</th>
-                </tr>
-            </table>
-        </div>
-
+        <PropertyInfo 
+            :property="property"
+            :totalDueThisMonth="totalDueThisMonth()"
+        />
         <div class="property-actions">
             <h3>ACTIONS:</h3>
             <button class="action-button" @click="sendBillEmail(mailerInfo())">Send Bill Email to Tenants</button>
@@ -38,7 +20,7 @@
                 Remove Property
             </button>
             <input v-model="rentAmount" type="number" />
-            <button class="action-button" @click="setRent({ propertyID: property.id, rent: rentAmount })">
+            <button class="action-button" @click="setRent({ property: property, rent: rentAmount })">
                 Set Rent
             </button>
         </div>
@@ -74,10 +56,18 @@
                     <th>Edit</th>
                     <th>Remove</th>
                 </tr>
-                <TenantRow v-for="tenant in activeTenants" :tenant="tenant" :key="tenant.id"/>
+                <TenantRow 
+                    v-for="tenant in activeTenants" 
+                    :tenant="tenant" 
+                    :key="tenant.id"
+                    :property="property"
+                />
                 <TenantRow 
                     v-if="displayInactiveTenants"
-                    v-for="tenant in inactiveTenants" :tenant="tenant" :key="tenant.id"
+                    v-for="tenant in inactiveTenants" 
+                    :tenant="tenant" 
+                    :key="tenant.id"
+                    :property="property"
                 />
             </table>
             <div>
@@ -109,6 +99,7 @@ import TenantRow from './TenantRow';
 import TenantModal from './TenantModal';
 import BillRow from './BillRow';
 import BillModal from './BillModal';
+import PropertyInfo from './PropertyInfo';
 
 export default {
     name: 'Property',
@@ -127,6 +118,7 @@ export default {
         TenantModal,
         BillRow,
         BillModal,
+        PropertyInfo,
     },
     methods: {
         ...mapActions([
@@ -149,7 +141,7 @@ export default {
             };
         },
         totalDueThisMonth() {
-            return (this.property.amount + this.splitBillsAmount).toFixed(2);
+            return (this.property.rent + this.splitBillsAmount).toFixed(2);
         },
         toggleNewBillModal() {
             this.showNewBillModal = !this.showNewBillModal;

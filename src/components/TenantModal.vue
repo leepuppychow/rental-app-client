@@ -15,7 +15,6 @@
     </div>
     <button @click="submitTenant(payload)">Submit</button>
   </div>
-  
 </template>
 
 <script>
@@ -34,7 +33,7 @@ export default {
         active: this.tenant ? this.tenant.active : true,
         tenantID: this.tenant ? this.tenant.id : null,
         propertyID: this.property.id,
-        rent: this.property.amount,
+        rent: this.property.rent,
       }
     }
   },

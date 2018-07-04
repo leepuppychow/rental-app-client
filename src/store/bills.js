@@ -40,9 +40,7 @@ const billsModule = {
         body: JSON.stringify(body),
       })
         .then(response => response.json())
-        .then(() => {
-          dispatch('fetchBills');
-        })
+        .then(() => dispatch('fetchBills'))
         .catch(error => console.log({ error }));
     },
 
