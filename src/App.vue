@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <NavBar v-if=""/>
+    <NavBar/>
     <router-view/>
   </div>
 </template>

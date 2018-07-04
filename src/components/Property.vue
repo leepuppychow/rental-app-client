@@ -25,8 +25,11 @@
         <div class="property-actions">
             <h3>ACTIONS:</h3>
             <button class="action-button" @click="sendBillEmail(mailerInfo())">Send Bill Email to Tenants</button>
+            <button class="action-button" @click="toggleNewTenantModal()">
+                Add New Tenant 
+            </button>
             <button class="action-button" @click="toggleNewBillModal()">
-                Add New Bill 
+                Add New Bill
             </button>
             <button class="action-button" >
                 Edit Property
@@ -82,6 +85,13 @@
                 <input type="checkbox" id="checkbox" v-model="displayInactiveTenants">
             </div>
         </div>
+        <TenantModal 
+            :property="property" 
+            :toggleModal="toggleNewTenantModal"
+            v-if="showNewTenantModal"
+        >
+            <h3>Add New Tenant</h3>
+        </TenantModal>
         <BillModal 
             :propertyID="property.id" 
             :toggleModal="toggleNewBillModal"
@@ -96,6 +106,7 @@
 <script>
 import { mapActions } from 'vuex';
 import TenantRow from './TenantRow';
+import TenantModal from './TenantModal';
 import BillRow from './BillRow';
 import BillModal from './BillModal';
 
@@ -107,11 +118,13 @@ export default {
             rentAmount: this.property.amount,
             splitBillsAmount: 0,
             showNewBillModal: false,
+            showNewTenantModal: false,
             displayInactiveTenants: false,
         }
     },
     components: {
         TenantRow,
+        TenantModal,
         BillRow,
         BillModal,
     },
@@ -140,6 +153,9 @@ export default {
         },
         toggleNewBillModal() {
             this.showNewBillModal = !this.showNewBillModal;
+        },
+        toggleNewTenantModal() {
+            this.showNewTenantModal = !this.showNewTenantModal;
         },
         mailerInfo() {
             return {

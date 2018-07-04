@@ -38,6 +38,21 @@ const tenantsModule = {
         })
         .catch(error => console.error({ error }));
     },
+    createTenant({ dispatch }, payload) {
+      fetch(`${baseURL}/tenants`, {
+        method: 'POST',
+        headers: {
+          ...authHeaders(),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+        .then((response) => {
+          debugger;
+          dispatch('fetchTenants');
+        })
+        .catch(error => console.log({ error }));
+    },
     updateTenant({ dispatch }, payload) {
       const { tenantID, status, firstName, lastName, email, phone, venmo } = payload;
       const body = {

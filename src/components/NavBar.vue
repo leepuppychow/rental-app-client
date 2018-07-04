@@ -1,11 +1,17 @@
 <template>
     <div class="nav-bar">
-        <a @click="toggleAddPropertyModal">Add New Property</a>
-        <a @click="logout" class="logout">Logout</a>
-        <AddPropertyModal 
-            :toggleModal="toggleAddPropertyModal"
-            v-if="addPropertyModalVisible"
-        />
+        <div class="nav-contents" v-if="!currentPageIsLogin()">
+            <a @click="toggleAddPropertyModal">Add New Property</a>
+            <a @click="toggleAddPropertyModal">Expenses Dashboard</a>
+            <a @click="logout" class="logout">Logout</a>
+            <AddPropertyModal 
+                :toggleModal="toggleAddPropertyModal"
+                v-if="addPropertyModalVisible"
+            />
+        </div>
+        <div v-else>
+            <h2>Welcome to Property Manager</h2>
+        </div>
     </div>
 </template>
 
@@ -29,7 +35,10 @@ export default {
         },
         toggleAddPropertyModal() {
             this.addPropertyModalVisible = !this.addPropertyModalVisible;
-        }
+        },
+        currentPageIsLogin() {
+            return this.$route.name === "Login";
+        },
     },
 }
 </script>
@@ -41,12 +50,16 @@ export default {
         top: 0;
         position: absolute;
         background: rgba(60, 92, 60, 0.8);
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: space-evenly;
-        
-        a {
-            color: white;
+        color: white;
+
+        .nav-contents {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-around;
+            
+            a {
+                margin-top: 18px;
+            }
         }
     }
 </style>
