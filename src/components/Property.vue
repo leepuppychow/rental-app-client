@@ -1,84 +1,33 @@
 <template>
     <div class="property">
-        <div class="property-info">
-            <h3>PROPERTY INFO:</h3>
-            <table>
-                <tr>
-                    <th>Address:</th>
-                    <th>{{ property.street + " " + property.city + ', ' + property.state }}</th>
-                </tr>
-                <tr>
-                    <th>Current Rental Rate:</th>
-                    <th>{{property.amount || 'none'}}</th>
-                </tr>
-                <tr>
-                    <th>Current Split Utilities:</th>
-                    <th>{{splitBillsAmount || 'none'}}</th>
-                </tr>
-                <tr>
-                    <th>TOTAL DUE ({{currentMonth}}):</th>
-                    <th>{{totalDueThisMonth()}}</th>
-                </tr>
-            </table>
-        </div>
-
-        <div class="property-actions">
-            <h3>ACTIONS:</h3>
-            <button @click="sendBillEmail(mailerInfo())">Send Bill Email to Tenants</button>
-            <button @click="toggleNewBillModal()">
-                Add New Bill 
-            </button>
-            <button class="danger" @click="deleteProperty(property.id)">
-                Remove Property
-            </button>
-            <input v-model="rentAmount" type="number" />
-            <button @click="setRent({ propertyID: property.id, rent: rentAmount })">
-                Set Rent
-            </button>
-        </div>
-
-        <div class="property-bills">
-            <h3>BILLS:</h3>
-            <table class="bill-table">
-                <tr class="table-header">
-                    <th>Bill Type</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                    <th>Shared?</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </tr>
-                <BillRow 
-                    v-for="bill in bills" 
-                    :property="property"
-                    :bill="bill" 
-                    :key="bill.id"
-                />    
-            </table>
-        </div>
-
-        <div class="property-tenants">
-            <h3>TENANTS:</h3>
-            <table class="tenant-table">
-                <tr class="table-header">
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Paid?</th>
-                    <th>Active?</th>
-                    <th>Edit</th>
-                    <th>Remove</th>
-                </tr>
-                <TenantRow v-for="tenant in activeTenants" :tenant="tenant" :key="tenant.id"/>
-                <TenantRow 
-                    v-if="displayInactiveTenants"
-                    v-for="tenant in inactiveTenants" :tenant="tenant" :key="tenant.id"
-                />
-            </table>
-            <div>
-                <label for="checkbox">Show Past Tenants</label>
-                <input type="checkbox" id="checkbox" v-model="displayInactiveTenants">
-            </div>
-        </div>
+        <PropertyInfo 
+            :property="property"
+            :totalDueThisMonth="totalDueThisMonth()"
+            :splitBillsAmount="splitBillsAmount"
+        />
+        <PropertyActions 
+            :property="property"
+            :rentAmount="rentAmount"
+            :mailerInfo='mailerInfo()'
+            :toggleNewTenantModal="toggleNewTenantModal"
+            :toggleNewBillModal="toggleNewBillModal"
+        />
+        <PropertyBills 
+            :bills="bills"
+            :property="property"
+        />
+        <PropertyTenants
+            :property="property"
+            :activeTenants="activeTenants"
+            :inactiveTenants="inactiveTenants"
+        />
+        <TenantModal 
+            :property="property" 
+            :toggleModal="toggleNewTenantModal"
+            v-if="showNewTenantModal"
+        >
+            <h3>Add New Tenant</h3>
+        </TenantModal>
         <BillModal 
             :propertyID="property.id" 
             :toggleModal="toggleNewBillModal"
@@ -93,32 +42,39 @@
 <script>
 import { mapActions } from 'vuex';
 import TenantRow from './TenantRow';
+import TenantModal from './TenantModal';
 import BillRow from './BillRow';
 import BillModal from './BillModal';
+import PropertyInfo from './PropertyInfo';
+import PropertyBills from './PropertyBills';
+import PropertyTenants from './PropertyTenants';
+import PropertyActions from './PropertyActions';
 
 export default {
     name: 'Property',
     props: ['property', 'tenants', 'bills'],
     data() {
         return {
-            rentAmount: this.property.amount,
+            rentAmount: this.property.rent,
             splitBillsAmount: 0,
             showNewBillModal: false,
+            showNewTenantModal: false,
             displayInactiveTenants: false,
         }
     },
     components: {
         TenantRow,
+        TenantModal,
         BillRow,
         BillModal,
+        PropertyInfo,
+        PropertyBills,
+        PropertyTenants,
+        PropertyActions,
     },
     methods: {
         ...mapActions([
-            'deleteProperty',
-            'fetchProperties',
-            'setRent',
             'setTenantBillsForProperty',
-            'sendBillEmail',
         ]),
         divideBillsAmongTenants() {
             const splitAmount = this.billTotal / this.numberOfTenants;
@@ -133,10 +89,13 @@ export default {
             };
         },
         totalDueThisMonth() {
-            return (this.property.amount + this.splitBillsAmount).toFixed(2);
+            return (this.property.rent + this.splitBillsAmount).toFixed(2);
         },
         toggleNewBillModal() {
             this.showNewBillModal = !this.showNewBillModal;
+        },
+        toggleNewTenantModal() {
+            this.showNewTenantModal = !this.showNewTenantModal;
         },
         mailerInfo() {
             return {
@@ -210,7 +169,7 @@ export default {
         .property-actions, .property-info, .property-tenants, .property-bills {
             width: 48%;
             background: rgb(240, 255, 240);;
-            margin: 7px;
+            margin: 10px;
             display: flex;
             flex-flow: column wrap;
             align-items: center;
@@ -221,7 +180,7 @@ export default {
             display: flex;
             flex-flow: column wrap;
 
-            button, input {
+            .action-button, input {
                 margin-bottom: 10px;
                 text-align: center;
             }

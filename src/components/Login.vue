@@ -1,36 +1,50 @@
 <template>
     <div class="login">
-        <h3>Please Login</h3>
+        <h3>
+            <span v-if="!createAccount">LOGIN</span>
+            <span v-else>CREATE ACCOUNT</span>
+        </h3>
         <input 
             type="text"
-            placeholder="Enter username:"
+            placeholder="Username"
             v-model="username"
+            class="login-input"
         />
         <input 
             type="password"
-            placeholder="Enter password:"
+            placeholder="Password"
             v-model="password"
+            class="login-input"
         />
         <input 
             v-if="createAccount"
             type="text"
-            placeholder="Enter email:"
+            placeholder="Email"
+            class="login-input"
             v-model="email"
         />
          <input 
             v-if="createAccount"
             type="text"
-            placeholder="Enter Venmo name:"
+            placeholder="Venmo username"
+            class="login-input"
             v-model="venmo"
         />
-        <button v-if="!createAccount" @click="loginRequest">
+        <button 
+            v-if="!createAccount" 
+            class="login-button"
+            @click="loginRequest">
             Login
         </button>
-        <button v-if="createAccount" @click="createUserRequest">
-            Create Account
+        <button 
+            v-if="createAccount" 
+            class="login-button"
+            @click="createUserRequest">
+            Submit
         </button>
         <h3 @click="showCreateAccountFields">
-            Click ME to Create New Account
+            <a v-if="!createAccount" class="bottom-message">Or... Create New Account</a>
+            <a v-else class="bottom-message">Oh wait, I just wanna login</a>
         </h3>
     </div>
     
@@ -116,9 +130,14 @@ export default {
         flex-flow: column wrap;
         align-items: center;
     }
-    input, button {
+    .login-input, .login-button {
         width: 250px;
         margin: 5px;
+        font-size: 16px;
+    }
+    .bottom-message {
+        color: blue;
+        text-decoration: underline;
     }
 
 
