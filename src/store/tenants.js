@@ -68,7 +68,7 @@ const tenantsModule = {
         },
         body: JSON.stringify(body),
       })
-        .then(response => dispatch('fetchTenants'))
+        .then(() => dispatch('fetchTenants'))
         .catch(error => console.error({ error }));
     },
   },

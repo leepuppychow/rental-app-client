@@ -50,6 +50,9 @@ export default {
         bills() {
             return this.$store.getters.bills;
         },
+        tenants() {
+            return this.$store.getters.tenants;
+        },
         activeProperty() {
             return this.properties.find(property => property.id === this.activeTab) || this.properties[0];
         },
@@ -64,12 +67,12 @@ export default {
             this.AddPropertyModalVisible = !this.AddPropertyModalVisible;
         },
         tenantsOfProperty(propertyID) {
-            return this.$store.getters.tenants.filter(tenant => {
+            return this.tenants.filter(tenant => {
                 return tenant.property_id === propertyID;
             });
         },
         billsOfProperty(propertyID) {
-            return this.$store.getters.bills.filter(bill => {
+            return this.bills.filter(bill => {
                 return bill.property_id === propertyID;
             })
         },

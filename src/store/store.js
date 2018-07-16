@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import propertiesModule from './properties';
 import tenantsModule from './tenants';
 import billsModule from './bills';
+import roomsModule from './rooms';
 import mailer from './mailer';
 
 Vue.use(Vuex);
@@ -12,6 +13,7 @@ export default new Vuex.Store({
     propertiesModule,
     tenantsModule,
     billsModule,
+    roomsModule,
     mailer,
   },
 });

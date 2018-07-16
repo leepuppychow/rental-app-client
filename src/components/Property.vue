@@ -1,9 +1,13 @@
 <template>
     <div class="property">
-        <PropertyInfo 
+        <PropertyInfo
             :property="property"
             :totalDueThisMonth="totalDueThisMonth()"
             :splitBillsAmount="splitBillsAmount"
+        />
+        <PropertyBills 
+            :bills="bills"
+            :property="property"
         />
         <PropertyActions 
             :property="property"
@@ -11,15 +15,6 @@
             :mailerInfo='mailerInfo()'
             :toggleNewTenantModal="toggleNewTenantModal"
             :toggleNewBillModal="toggleNewBillModal"
-        />
-        <PropertyBills 
-            :bills="bills"
-            :property="property"
-        />
-        <PropertyTenants
-            :property="property"
-            :activeTenants="activeTenants"
-            :inactiveTenants="inactiveTenants"
         />
         <TenantModal 
             :property="property" 
@@ -124,11 +119,6 @@ export default {
         numberOfTenants() {
             return this.activeTenants.length;
         },
-        currentMonth() {
-            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            const currentMonth = new Date().getMonth();
-            return months[currentMonth].toUpperCase();
-        },
     },
     watch: {
         billTotal: function() {
@@ -143,7 +133,7 @@ export default {
 
 <style lang="scss">
     .property {
-        background: rgba(60, 92, 60, 0.5);
+        background: rgba(118, 165, 118, 0.5);
         width: 75vw;
         height: auto;
         margin: auto;
@@ -151,10 +141,6 @@ export default {
         display: flex;
         flex-flow: row wrap;
         justify-content: space-evenly;
-
-        h3 {
-            text-decoration: underline;
-        }
 
         table, th, tr {
             border: 1px solid black;
@@ -174,6 +160,10 @@ export default {
             flex-flow: column wrap;
             align-items: center;
             justify-content: flex-start;
+        }
+
+        .property-info {
+            width: 98%;
         }
 
         .property-actions {

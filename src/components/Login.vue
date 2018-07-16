@@ -133,7 +133,6 @@ export default {
     .login-input, .login-button {
         width: 250px;
         margin: 5px;
-        font-size: 16px;
     }
     .bottom-message {
         color: blue;
